@@ -1,0 +1,12 @@
+<div class="btn-toolbar" role="toolbar" aria-label="Sudoku numbers" id="num-pad-vert">
+  <div class="btn-group-vertical mr-2" role="group" aria-label="First group">
+    <button
+      *ngFor="let id of numbers"
+      type="button" id="{{ id }}"
+      class="btn btn-secondary num"
+      (click)="onClick(id)"
+    >
+      {{ id }}
+    </button>
+  </div>
+</div>

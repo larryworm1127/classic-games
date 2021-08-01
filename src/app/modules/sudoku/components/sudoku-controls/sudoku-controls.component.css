@@ -1,0 +1,28 @@
+/* Button Color and Hovered Color */
+#pencil-toggle {
+  color: #afd9c8;
+}
+
+#pencil-toggle:hover {
+  color: #8cc9b0
+}
+
+#undo {
+  color: indianred;
+}
+
+#undo:hover {
+  color: red;
+}
+
+#erase {
+  color: #624c47
+}
+
+#erase:hover {
+  color: #443532
+}
+
+.space {
+  margin-top: 10px;
+}

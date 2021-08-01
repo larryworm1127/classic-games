@@ -1,0 +1,156 @@
+/* Grid Border Lines */
+#square0, #square1, #square2, #square3, #square4, #square5, #square6, #square7, #square8 {
+  border-top: 3px solid #525B76;
+  border-bottom: 1px solid #525B76;
+}
+
+#square9, #square10, #square11, #square12, #square13, #square14, #square15, #square16, #square17 {
+  border-bottom: 1px solid #525B76;
+}
+
+#square18, #square19, #square20, #square21, #square22, #square23, #square24, #square25, #square26 {
+  border-bottom: 3px solid #525B76;
+}
+
+#square27, #square28, #square29, #square30, #square31, #square32, #square33, #square34, #square35 {
+  border-bottom: 1px solid #525B76;
+}
+
+#square36, #square37, #square38, #square39, #square40, #square41, #square42, #square43, #square44 {
+  border-bottom: 1px solid #525B76;
+}
+
+#square45, #square46, #square47, #square48, #square49, #square50, #square51, #square52, #square53 {
+  border-bottom: 3px solid #525B76;
+}
+
+#square54, #square55, #square56, #square57, #square58, #square59, #square60, #square61, #square62 {
+  border-bottom: 1px solid #525B76;
+}
+
+#square63, #square64, #square65, #square66, #square67, #square68, #square69, #square70, #square71 {
+  border-bottom: 1px solid #525B76;
+}
+
+#square72, #square73, #square74, #square75, #square76, #square77, #square78, #square79, #square80 {
+  border-bottom: 3px solid #525B76;
+}
+
+#square0, #square9, #square18, #square27, #square36, #square45, #square54, #square63, #square72 {
+  border-left: 3px solid #525B76;
+  border-right: 1px solid #525B76;
+}
+
+#square2, #square11, #square20, #square29, #square38, #square47, #square56, #square65, #square74 {
+  border-left: 1px solid #525B76;
+  border-right: 3px solid #525B76;
+}
+
+#square4, #square13, #square22, #square31, #square40, #square49, #square58, #square67, #square76 {
+  border-left: 1px solid #525B76;
+  border-right: 1px solid #525B76;
+}
+
+#square6, #square15, #square24, #square33, #square42, #square51, #square60, #square69, #square78 {
+  border-left: 3px solid #525B76;
+  border-right: 1px solid #525B76;
+}
+
+#square8, #square17, #square26, #square35, #square44, #square53, #square62, #square71, #square80 {
+  border-left: 1px solid #525B76;
+  border-right: 3px solid #525B76;
+}
+
+
+/* Grid Number Fonts and Color */
+p.pencil {
+  font-size: 0.3em;
+  color: #000000;
+}
+
+p.not-pencil {
+  color: #000000;
+}
+
+p.player {
+  color: grey;
+}
+
+.error {
+  color: orangered;
+}
+
+.selected {
+  background: #faff64;
+}
+
+
+/* Mobile Styles */
+@media only screen and (max-width: 521px) {
+  /* Game Grid */
+  .game-field {
+    width: 32px;
+    height: 32px;
+    display: block;
+    float: left;
+    color: #EAEAEA;
+    font-size: 1.1em;
+    padding: 6px 0;
+  }
+}
+
+/* Small Tablet Styles */
+@media only screen and (min-width: 522px) and (max-width: 767px) {
+  /* Game Grid */
+  .game-field {
+    width: 50px;
+    height: 50px;
+    display: block;
+    float: left;
+    color: #EAEAEA;
+    font-size: 2em;
+    padding: 8px 8px;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  /* Game Grid */
+  .game-field {
+    width: 40px;
+    height: 40px;
+    display: block;
+    float: left;
+    color: #EAEAEA;
+    font-size: 1.6em;
+    padding: 8px 8px;
+  }
+}
+
+/* Bigger Tablet Styles */
+@media only screen and (min-width: 993px) and (max-width: 1023px) {
+  /* Game Grid */
+  .game-field {
+    width: 55px;
+    height: 55px;
+    display: block;
+    float: left;
+    color: #EAEAEA;
+    font-size: 2.2em;
+    padding: 8px 9px;
+  }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 1024px) {
+  /* Game Grid */
+  .game-field {
+    width: 60px;
+    height: 60px;
+    display: block;
+    float: left;
+    color: #EAEAEA;
+    font-size: 2.5em;
+    padding: 8px 15px;
+  }
+}
