@@ -1,0 +1,8 @@
+<div id="square{{square.id}}"
+     class="game-field"
+     (click)="makeMove()"
+     [ngSwitch]="square.state"
+>
+  <i *ngSwitchCase="'X'" class="fas fa-times cross"></i>
+  <i *ngSwitchCase="'O'" class="far fa-circle circle"></i>
+</div>

@@ -1,0 +1,48 @@
+#start-human {
+  color: #afd9c8
+}
+
+#start-human:hover {
+  color: #8cc9b0
+}
+
+#start-comp {
+  color: #624c47
+}
+
+#start-comp:hover {
+  color: #443532
+}
+
+#pvp {
+  color: indianred;
+}
+
+#pvp:hover {
+  color: red;
+}
+
+
+/* Mobile Styles */
+@media only screen and (max-width: 425px) {
+  /* Icon Sizes */
+  #human-icon, #comp-icon, #pvp-icon {
+    font-size: 3em;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 426px) and (max-width: 1023px) {
+  /* Icon Sizes */
+  #human-icon, #comp-icon, #pvp-icon {
+    font-size: 3em;
+  }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 1024px) {
+  /* Icon Sizes */
+  #human-icon, #comp-icon, #pvp-icon {
+    font-size: 5em;
+  }
+}

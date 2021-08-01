@@ -1,0 +1,34 @@
+/* Button Color and Hovered Color */
+
+/* Mobile Styles */
+@media only screen and (max-width: 425px) {
+  /* Game Grid */
+  .game {
+    background-color: transparent;
+    width: 268px;
+    height: 268px;
+    margin: 50px auto;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 426px) and (max-width: 1023px) {
+  /* Game Grid */
+  .game {
+    background-color: transparent;
+    width: 335px;
+    height: 335px;
+    margin: 50px auto;
+  }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 1024px) {
+  /* Game Grid */
+  .game {
+    background-color: transparent;
+    width: 402px;
+    height: 402px;
+    margin: 50px auto;
+  }
+}
