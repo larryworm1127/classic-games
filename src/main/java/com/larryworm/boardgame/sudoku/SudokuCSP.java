@@ -57,15 +57,13 @@ public class SudokuCSP {
         variables.forEach(Variable::unAssign);
     }
 
-    public List<Pair<List<Pair<Variable, Integer>>, String>>
-    checkSolution(List<List<Pair<Variable, Integer>>> solutions) {
-
+    public List<Pair<List<Assignment>, String>> checkSolution(List<List<Assignment>> solutions) {
         // Save current value to restore later
-        var currentValues = variables.stream().map(var -> Pair.with(var, var.getValue()));
-        var errors = new ArrayList<Pair<List<Pair<Variable, Integer>>, String>>();
+        var currentValues = variables.stream().map(var -> new Assignment(var, var.getValue()));
+        var errors = new ArrayList<Pair<List<Assignment>, String>>();
 
         for (var solution : solutions) {
-            var solutionVars = solution.stream().map(Pair::getValue0).toList();
+            var solutionVars = solution.stream().map(Assignment::variable).toList();
 
             if (solutionVars.size() != variables.size()) {
                 errors.add(Pair.with(solution, "Solution has incorrect number of variables in it"));
@@ -84,7 +82,7 @@ public class SudokuCSP {
 
             // Set solution values to variable
             for (var pair : solution) {
-                pair.getValue0().setValue(pair.getValue1());
+                pair.variable().setValue((Integer) pair.value());
             }
 
             // Check constraints with the given solution
@@ -97,7 +95,7 @@ public class SudokuCSP {
         }
 
         // Reset current values
-        currentValues.forEach(pair -> pair.getValue0().setValue(pair.getValue1()));
+        currentValues.forEach(pair -> pair.variable().setValue((Integer) pair.value()));
 
         return errors;
     }
