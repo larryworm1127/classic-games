@@ -2,8 +2,10 @@ package com.larryworm.boardgame.sudoku;
 
 import com.larryworm.boardgame.Util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class Sudoku {
@@ -37,6 +39,25 @@ public class Sudoku {
             }
         }
         return str.toString();
+    }
+
+    public static Optional<List<Assignment>> solveSudoku(List<Integer> board) {
+        // Format board into 2d list
+        List<List<Integer>> board2d = new ArrayList<>();
+        int index = 0;
+        for (int i = 0; i < DIM; i++) {
+            List<Integer> row = new ArrayList<>();
+            for (int j = 0; j < DIM; j++) {
+                row.add(board.get(index));
+                index++;
+            }
+            board2d.add(row);
+        }
+
+        // Create CSP and solve using backtrack search
+        var csp = SudokuCSP.getInstance(board2d);
+        var solutions = Algorithms.backtrackSearch(csp, false, false);
+        return (solutions.isEmpty()) ? Optional.empty() : Optional.of(solutions.get(0));
     }
 
     /**
@@ -81,8 +102,8 @@ public class Sudoku {
 
     private static boolean checkConflict(int row, int column, int value, Integer[][] board) {
         return (checkConflictRow(row, value, board) &&
-                checkConflictColumn(column, value, board) &&
-                checkConflictBox(row, column, value, board));
+            checkConflictColumn(column, value, board) &&
+            checkConflictBox(row, column, value, board));
     }
 
     private static boolean checkConflictColumn(int column, int value, Integer[][] board) {
