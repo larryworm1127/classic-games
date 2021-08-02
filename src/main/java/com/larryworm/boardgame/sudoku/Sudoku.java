@@ -1,9 +1,9 @@
-package com.larryworm.boardgame;
+package com.larryworm.boardgame.sudoku;
+
+import com.larryworm.boardgame.Util;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Sudoku {
@@ -14,9 +14,9 @@ public class Sudoku {
         HARD
     }
 
-    private static final List<Integer> SUDOKU_NUMS = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    private static final int DIM = 9;
-    private static final int BOX_DIM = 3;
+    public static final List<Integer> SUDOKU_NUMS = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    public static final int DIM = 9;
+    public static final int BOX_DIM = 3;
 
     /**
      * Generates a readable Sudoku board string given its flattened representation.
@@ -47,7 +47,7 @@ public class Sudoku {
      */
     public static List<Integer> generateBoard(Difficulty difficulty) {
         // Initialize new board array
-        final int[][] board = new int[DIM][DIM];
+        final Integer[][] board = new Integer[DIM][DIM];
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
                 board[i][j] = 0;
@@ -64,10 +64,7 @@ public class Sudoku {
         removeDigits(difficulty, board);
 
         // Flatten array
-        return Arrays.stream(board)
-                .map(row -> IntStream.of(row).boxed().toList())
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
+        return Util.flatten2dArray(board);
     }
 
     private static int randomGenerator(int num) {
@@ -82,22 +79,22 @@ public class Sudoku {
         };
     }
 
-    private static boolean checkConflict(int row, int column, int value, int[][] board) {
+    private static boolean checkConflict(int row, int column, int value, Integer[][] board) {
         return (checkConflictRow(row, value, board) &&
                 checkConflictColumn(column, value, board) &&
                 checkConflictBox(row, column, value, board));
     }
 
-    private static boolean checkConflictColumn(int column, int value, int[][] board) {
+    private static boolean checkConflictColumn(int column, int value, Integer[][] board) {
         Stream<Integer> boardColumn = Arrays.stream(board).map(boardRow -> boardRow[column]);
         return boardColumn.noneMatch(num -> num == value);
     }
 
-    private static boolean checkConflictRow(int row, int value, int[][] board) {
+    private static boolean checkConflictRow(int row, int value, Integer[][] board) {
         return Arrays.stream(board[row]).noneMatch(num -> num == value);
     }
 
-    private static boolean checkConflictBox(int row, int column, int num, int[][] board) {
+    private static boolean checkConflictBox(int row, int column, int num, Integer[][] board) {
         int boxRow = row - row % BOX_DIM;
         int boxCol = column - column % BOX_DIM;
         for (int i = 0; i < BOX_DIM; i++) {
@@ -110,7 +107,7 @@ public class Sudoku {
         return true;
     }
 
-    private static void fillDiagonal(int[][] board) {
+    private static void fillDiagonal(Integer[][] board) {
         for (int i = 0; i < DIM; i += BOX_DIM) {
             int num;
             for (int row = 0; row < BOX_DIM; row++) {
@@ -127,7 +124,7 @@ public class Sudoku {
         }
     }
 
-    private static boolean fillRemaining(int row, int col, int[][] board) {
+    private static boolean fillRemaining(int row, int col, Integer[][] board) {
         // Start on new row if col index goes over limit
         if (row < DIM - 1 && col >= DIM) {
             row += 1;
@@ -156,7 +153,7 @@ public class Sudoku {
         return false;
     }
 
-    private static void removeDigits(Difficulty difficulty, int[][] board) {
+    private static void removeDigits(Difficulty difficulty, Integer[][] board) {
         int count = getNumToRemove(difficulty);
         while (count != 0) {
             int cellId = randomGenerator(DIM * DIM) - 1;

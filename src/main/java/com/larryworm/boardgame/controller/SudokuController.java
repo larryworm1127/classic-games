@@ -1,6 +1,6 @@
 package com.larryworm.boardgame.controller;
 
-import com.larryworm.boardgame.Sudoku;
+import com.larryworm.boardgame.sudoku.Sudoku;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
