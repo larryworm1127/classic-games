@@ -5,16 +5,15 @@ import org.javatuples.Pair;
 import java.util.*;
 
 
-public class SudokuCspVariable {
+public class Variable {
 
     private final String name;
     private List<Integer> domain;
     private List<Integer> currDomain;
     private Integer value;
-    private static final Map<Pair<SudokuCspVariable, Integer>, List<Pair<SudokuCspVariable, Integer>>>
-            undoMap = new HashMap<>();
+    public static final Map<Pair<Variable, Integer>, List<Pair<Variable, Integer>>> undoMap = new HashMap<>();
 
-    public SudokuCspVariable(String name, List<Integer> domain) {
+    public Variable(String name, List<Integer> domain) {
         this.name = name;
         this.domain = new ArrayList<>(domain);
         this.currDomain = new ArrayList<>(domain);
@@ -23,7 +22,7 @@ public class SudokuCspVariable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", SudokuCspVariable.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", Variable.class.getSimpleName() + "[", "]")
                 .add("name='" + name + "'")
                 .add("domain=" + domain)
                 .add("currDomain=" + currDomain)
@@ -36,11 +35,11 @@ public class SudokuCspVariable {
     }
 
     public List<Integer> getDomain() {
-        return new ArrayList<>(domain);
+        return List.copyOf(domain);
     }
 
     public void setDomain(List<Integer> domain) {
-        this.domain = domain;
+        this.domain = new ArrayList<>(domain);
     }
 
     public Integer getValue() {
@@ -60,7 +59,7 @@ public class SudokuCspVariable {
         if (isAssigned()) {
             return List.of(value);
         }
-        return new ArrayList<>(currDomain);
+        return List.copyOf(currDomain);
     }
 
     public void unAssign() {
@@ -85,7 +84,7 @@ public class SudokuCspVariable {
         return currDomain.contains(value);
     }
 
-    public void pruneValue(Integer value, SudokuCspVariable reasonVar, Integer reasonVal) {
+    public void pruneValue(Integer value, Variable reasonVar, Integer reasonVal) {
         if (currDomain.size() == 0) {
             String errorFormat = "Error: tried to prune value {} from variable {}'s domain, but value not present!";
             System.out.printf((errorFormat) + "%n", value, name);
@@ -95,11 +94,11 @@ public class SudokuCspVariable {
         currDomain.remove(value);
 
         // Add reason to remove <value> in undo map
-        var key = new Pair<>(reasonVar, reasonVal);
+        var key = Pair.with(reasonVar, reasonVal);
         if (!undoMap.containsKey(key)) {
             undoMap.put(key, new ArrayList<>());
         }
-        undoMap.get(key).add(new Pair<>(this, value));
+        undoMap.get(key).add(Pair.with(this, value));
     }
 
     public void restoreValue(Integer value) {
@@ -119,7 +118,7 @@ public class SudokuCspVariable {
         undoMap.clear();
     }
 
-    public static void restoreValues(SudokuCspVariable reasonVar, Integer reasonVal) {
+    public static void restoreValues(Variable reasonVar, Integer reasonVal) {
         var key = new Pair<>(reasonVar, reasonVal);
         if (undoMap.containsKey(key)) {
             for (var item : undoMap.get(key)) {
@@ -130,13 +129,13 @@ public class SudokuCspVariable {
     }
 
     public static void main(String[] args) {
-        var a = new SudokuCspVariable("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
-        var b = new SudokuCspVariable("test2", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
+        var a = new Variable("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
+        var b = new Variable("test2", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
         System.out.println(a);
 
         a.pruneValue(2, b, 3);
         System.out.println(a.getCurrDomain());
-        System.out.println(SudokuCspVariable.undoMap);
+        System.out.println(Variable.undoMap);
         restoreValues(b, 3);
     }
 }

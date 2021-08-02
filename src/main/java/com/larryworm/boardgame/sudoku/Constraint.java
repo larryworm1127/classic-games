@@ -7,9 +7,9 @@ import java.util.StringJoiner;
 public abstract class Constraint {
 
     private final String name;
-    private final List<SudokuCspVariable> scope;
+    private final List<Variable> scope;
 
-    public Constraint(String name, List<SudokuCspVariable> scope) {
+    public Constraint(String name, List<Variable> scope) {
         this.name = name;
         this.scope = new ArrayList<>(scope);
     }
@@ -22,8 +22,8 @@ public abstract class Constraint {
                 .toString();
     }
 
-    public List<SudokuCspVariable> getScope() {
-        return new ArrayList<>(scope);
+    public List<Variable> getScope() {
+        return List.copyOf(scope);
     }
 
     public String getName() {
@@ -38,7 +38,7 @@ public abstract class Constraint {
         return (int) scope.stream().filter(var -> !var.isAssigned()).count();
     }
 
-    public List<SudokuCspVariable> getUnAssignedVars() {
+    public List<Variable> getUnAssignedVars() {
         return scope.stream().filter(var -> !var.isAssigned()).toList();
     }
 
