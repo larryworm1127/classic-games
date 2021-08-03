@@ -23,11 +23,11 @@ public class Variable {
     @Override
     public String toString() {
         return new StringJoiner(", ", Variable.class.getSimpleName() + "[", "]")
-                .add("name='" + name + "'")
-                .add("domain=" + domain)
-                .add("currDomain=" + currDomain)
-                .add("value=" + value)
-                .toString();
+            .add("name='" + name + "'")
+            .add("domain=" + domain)
+            .add("currDomain=" + currDomain)
+            .add("value=" + value)
+            .toString();
     }
 
     public String getName() {
@@ -35,7 +35,7 @@ public class Variable {
     }
 
     public List<Integer> getDomain() {
-        return List.copyOf(domain);
+        return new ArrayList<>(domain);
     }
 
     public void setDomain(List<Integer> domain) {
@@ -57,9 +57,9 @@ public class Variable {
 
     public List<Integer> getCurrDomain() {
         if (isAssigned()) {
-            return List.of(value);
+            return new ArrayList<>(List.of(value));
         }
-        return List.copyOf(currDomain);
+        return new ArrayList<>(currDomain);
     }
 
     public void unAssign() {
@@ -126,16 +126,5 @@ public class Variable {
             }
             undoMap.remove(key);
         }
-    }
-
-    public static void main(String[] args) {
-        var a = new Variable("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
-        var b = new Variable("test2", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
-        System.out.println(a);
-
-        a.pruneValue(2, b, 3);
-        System.out.println(a.getCurrDomain());
-        System.out.println(Variable.undoMap);
-        restoreValues(b, 3);
     }
 }

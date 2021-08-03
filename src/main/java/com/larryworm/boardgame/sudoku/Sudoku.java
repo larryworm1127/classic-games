@@ -57,6 +57,7 @@ public class Sudoku {
         // Create CSP and solve using backtrack search
         var csp = SudokuCSP.getInstance(board2d);
         var solutions = Algorithms.backtrackSearch(csp, false, false);
+        System.out.println(csp.checkSolution(solutions));
         return (solutions.isEmpty()) ? Optional.empty() : Optional.of(solutions.get(0));
     }
 
@@ -186,5 +187,21 @@ public class Sudoku {
                 board[row][column] = 0;
             }
         }
+    }
+
+    public static void main(String[] args) {
+        var board = List.of(
+            0, 0, 2, 0, 9, 0, 0, 6, 0,
+            0, 4, 0, 0, 0, 1, 0, 0, 8,
+            0, 7, 0, 4, 2, 0, 0, 0, 3,
+            5, 0, 0, 0, 0, 0, 3, 0, 0,
+            0, 0, 1, 0, 6, 0, 5, 0, 0,
+            0, 0, 3, 0, 0, 0, 0, 0, 6,
+            1, 0, 0, 0, 5, 7, 0, 4, 0,
+            6, 0, 0, 9, 0, 0, 0, 2, 0,
+            0, 2, 0, 0, 8, 0, 1, 0, 0
+        );
+        var result = solveSudoku(board);
+        System.out.println();
     }
 }

@@ -1,6 +1,8 @@
 package com.larryworm.boardgame.sudoku;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.function.Function;
 
 public abstract class Constraint {
@@ -22,7 +24,7 @@ public abstract class Constraint {
     }
 
     public List<Variable> getScope() {
-        return List.copyOf(scope);
+        return new ArrayList<>(scope);
     }
 
     public String getName() {
@@ -55,17 +57,17 @@ public abstract class Constraint {
      * Utility function for finding an assignment to the variables of a
      * constraint that together with var=val satisfy the constraint. That
      * is, this function looks for a supporting tuple.
-     *
+     * <p>
      * findValues uses recursion to build up a complete assignment, one value
      * from every variable's current domain, along with var=val.
-     *
+     * <p>
      * It tries all ways of constructing such an assignment (using
      * a recursive depth-first search).
-     *
+     * <p>
      * If partialTestFunc is supplied, it will use this function to test
      * all partial assignments---if the function returns False
      * it will terminate trying to grow that assignment.
-     *
+     * <p>
      * It will test all full assignments to "allVars" using finalTestFunc
      * returning once it finds a full assignment that passes this test.
      *
@@ -79,8 +81,7 @@ public abstract class Constraint {
         }
 
         // sort the variables call the internal version with the variables sorted
-        remainingVars.sort(Comparator.comparingInt(Variable::getCurrDomainSize));
-        Collections.reverse(remainingVars);
+        remainingVars.sort((v1, v2) -> Integer.compare(v2.getCurrDomainSize(), v1.getCurrDomainSize()));
         return findValuesHelper(remainingVars, assignments, finalTestFunc, partialTestFunc);
     }
 

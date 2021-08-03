@@ -1,5 +1,6 @@
 package com.larryworm.boardgame.sudoku;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,7 @@ public class AllDiffConstraint extends Constraint {
         varsToAssign.remove(var);
         return Constraint.findValues(
             varsToAssign,
-            List.of(new Assignment(var, val)),
+            new ArrayList<>(List.of(new Assignment(var, val))),
             AllDiffConstraint::valuesNotEqual,
             AllDiffConstraint::valuesNotEqual
         );
@@ -37,7 +38,7 @@ public class AllDiffConstraint extends Constraint {
      * satisfy the all diff constraint.
      */
     private static boolean valuesNotEqual(List<Assignment> list) {
-        var values = list.stream().map(Assignment::value);
-        return Set.of(values).size() == values.count();
+        var values = list.stream().map(Assignment::value).toList();
+        return Set.copyOf(values).size() == values.size();
     }
 }

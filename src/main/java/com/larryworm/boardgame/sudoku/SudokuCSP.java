@@ -16,8 +16,8 @@ public class SudokuCSP {
 
     public SudokuCSP(String name, List<Variable> variables, List<Constraint> constraints) {
         this.name = name;
-        this.variables = variables;
-        this.constraints = constraints;
+        this.variables = new ArrayList<>(variables);
+        this.constraints = new ArrayList<>(constraints);
 
         constraintsOf = new HashMap<>();
         for (var c : constraints) {
@@ -29,6 +29,16 @@ public class SudokuCSP {
                 constraintsOf.get(index).add(c);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", SudokuCSP.class.getSimpleName() + "[", "]")
+            .add("name='" + name + "'")
+            .add("variables=" + variables)
+            .add("constraints=" + constraints)
+            .add("constraintsOf=" + constraintsOf)
+            .toString();
     }
 
     public String getName() {
@@ -70,12 +80,12 @@ public class SudokuCSP {
                 continue;
             }
 
-            if (Set.of(solutionVars).size() != variables.size()) {
+            if (Set.copyOf(solutionVars).size() != variables.size()) {
                 errors.add(Pair.with(solution, "Solution has duplicate Variable Assignments"));
                 continue;
             }
 
-            if (!Set.of(solutionVars).equals(Set.of(variables))) {
+            if (!Set.copyOf(solutionVars).equals(Set.copyOf(variables))) {
                 errors.add(Pair.with(solution, "Solution has incorrect Variable in it"));
                 continue;
             }
