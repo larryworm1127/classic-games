@@ -67,7 +67,7 @@ public class SudokuCSP {
         variables.forEach(Variable::unAssign);
     }
 
-    public List<Pair<List<Assignment>, String>> checkSolution(List<List<Assignment>> solutions) {
+    public boolean checkSolution(List<List<Assignment>> solutions) {
         // Save current value to restore later
         var currentValues = variables.stream().map(var -> new Assignment(var, var.getValue()));
         var errors = new ArrayList<Pair<List<Assignment>, String>>();
@@ -107,7 +107,7 @@ public class SudokuCSP {
         // Reset current values
         currentValues.forEach(pair -> pair.variable().setValue((Integer) pair.value()));
 
-        return errors;
+        return errors.isEmpty();
     }
 
     public static SudokuCSP getInstance(List<List<Integer>> initialBoard) {
@@ -138,9 +138,7 @@ public class SudokuCSP {
         for (int i : List.of(0, 3, 6)) {
             for (int j : List.of(0, 3, 6)) {
                 var scope = new ArrayList<Variable>();
-                IntStream.range(0, 3).forEach(k -> {
-                    IntStream.range(0, 3).forEach(l -> scope.add(variables[i + k][j + l]));
-                });
+                IntStream.range(0, 3).forEach(k -> IntStream.range(0, 3).forEach(l -> scope.add(variables[i + k][j + l])));
                 constraints.add(new AllDiffConstraint("box_alldiff", scope));
             }
         }
