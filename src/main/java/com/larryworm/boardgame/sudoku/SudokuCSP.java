@@ -117,7 +117,7 @@ public class SudokuCSP {
             for (int j = 0; j < Sudoku.DIM; j++) {
                 var col = initialBoard.get(i).get(j);
                 var domain = (col == 0) ? Sudoku.SUDOKU_NUMS : List.of(col);
-                var variable = new Variable("V%d,%d".formatted(i + 1, j + 1), domain);
+                var variable = new SudokuVariable("V%d,%d".formatted(i + 1, j + 1), domain, i, j);
                 variables[i][j] = variable;
             }
         }

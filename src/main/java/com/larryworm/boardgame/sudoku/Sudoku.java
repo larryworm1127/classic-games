@@ -61,6 +61,15 @@ public class Sudoku {
         return (solutions.isEmpty()) ? Optional.empty() : Optional.of(solutions.get(0));
     }
 
+    public static List<Integer> assignmentsToBoard(List<Assignment> assignments, List<Integer> board) {
+        var result = new ArrayList<>(board);
+        for (var assignment : assignments) {
+            SudokuVariable var = (SudokuVariable) assignment.variable();
+            result.set(var.getRow() * Sudoku.DIM + var.getCol(), (Integer) assignment.value());
+        }
+        return result;
+    }
+
     /**
      * Generate a random Sudoku board based on given difficulty.
      *
@@ -202,6 +211,6 @@ public class Sudoku {
             0, 2, 0, 0, 8, 0, 1, 0, 0
         );
         var result = solveSudoku(board);
-        System.out.println();
+        System.out.println(assignmentsToBoard(result.get(), board));
     }
 }
