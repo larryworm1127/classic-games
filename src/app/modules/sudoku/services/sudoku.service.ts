@@ -14,6 +14,8 @@ export class SudokuService {
   private gameBoard: SudokuBoard;
   private selectedCell: number = -1;
   private moves: SudokuCell[] = [];
+  message: string = 'Press "New Game" to start!';
+  numHints: number = 0;
   numUndo: number = 0;
   pencilEnabled: boolean = false;
   difficulty: Difficulty = Difficulty.Easy;
@@ -51,6 +53,23 @@ export class SudokuService {
         )
       )
     })
+  }
+
+  getNewHint(): void {
+    // Do nothing if game hasn't started
+    if (this.gameState !== GameStates.GameRunning) {
+      return;
+    }
+
+    this.serverService.getHints(this.boardContent).subscribe(hints => {
+      if (hints === null) {
+        this.message = "Board has error or is unsolvable!";
+      } else {
+        let randomHint = hints[Math.floor(Math.random() * hints.length)];
+        this.message = `Hint: (R${randomHint.variable.row + 1}, C${randomHint.variable.col + 1}), ${randomHint.value}`;
+        this.numHints++;
+      }
+    });
   }
 
   selectedNewCell(cell: SudokuCell): void {

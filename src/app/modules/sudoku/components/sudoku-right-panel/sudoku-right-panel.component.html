@@ -3,7 +3,12 @@
   <h3 class="subheader" id="pencilOn">Pencil: {{ boardService.pencilEnabled ? "On" : "Off" }}</h3>
   <h3 class="subheader" id="difficulty">Difficulty: {{ boardService.difficulty }}</h3>
   <h3 class="subheader" id="numUndo">Undo: {{ boardService.numUndo }}</h3>
+  <h3 class="subheader" id="hint-count">Hints Used: {{ boardService.numHints }} </h3>
+  <hr/>
+  <h3 class="subheader">Message:</h3>
+  <h5 class="subheader">{{ boardService.message }}</h5>
 </div>
+
 <button type="button" id="new-game" class="btn btn-primary" (click)="boardService.newGame()">New Game</button>
 
 <div ngbDropdown class="d-inline-block">
@@ -14,3 +19,5 @@
     <button ngbDropdownItem (click)="selectDifficulty('Hard')">Hard</button>
   </div>
 </div>
+
+<button type="button" class="btn btn-primary" (click)="boardService.getNewHint()">Get Hint!</button>
