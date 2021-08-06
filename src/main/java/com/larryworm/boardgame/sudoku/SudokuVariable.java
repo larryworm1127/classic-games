@@ -1,5 +1,8 @@
 package com.larryworm.boardgame.sudoku;
 
+import com.larryworm.boardgame.csp.Assignment;
+import com.larryworm.boardgame.csp.Variable;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

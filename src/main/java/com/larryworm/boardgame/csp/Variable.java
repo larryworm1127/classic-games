@@ -1,4 +1,4 @@
-package com.larryworm.boardgame.sudoku;
+package com.larryworm.boardgame.csp;
 
 import java.util.*;
 

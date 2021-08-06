@@ -1,6 +1,6 @@
 package com.larryworm.boardgame.controller;
 
-import com.larryworm.boardgame.sudoku.Assignment;
+import com.larryworm.boardgame.csp.Assignment;
 import com.larryworm.boardgame.sudoku.Sudoku;
 import com.larryworm.boardgame.sudoku.SudokuVariable;
 import org.springframework.web.bind.annotation.*;

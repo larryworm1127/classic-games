@@ -1,5 +1,6 @@
 package com.larryworm.boardgame.sudoku;
 
+import com.larryworm.boardgame.csp.Assignment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

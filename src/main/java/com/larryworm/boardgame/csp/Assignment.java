@@ -1,4 +1,4 @@
-package com.larryworm.boardgame.sudoku;
+package com.larryworm.boardgame.csp;
 
 public record Assignment<E>(Variable<E> variable, E value) {
 

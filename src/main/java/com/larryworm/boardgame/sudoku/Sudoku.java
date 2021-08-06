@@ -1,6 +1,7 @@
 package com.larryworm.boardgame.sudoku;
 
 import com.larryworm.boardgame.Util;
+import com.larryworm.boardgame.csp.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
