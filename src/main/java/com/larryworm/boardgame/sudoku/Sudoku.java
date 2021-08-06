@@ -72,7 +72,7 @@ public class Sudoku {
             for (int j = 0; j < Sudoku.DIM; j++) {
                 var num = initialBoard.get(i).get(j);
                 var domain = (num == 0) ? Sudoku.SUDOKU_NUMS : List.of(num);
-                row.add(new SudokuVariable("V%d,%d".formatted(i + 1, j + 1), domain, i, j));
+                row.add(SudokuVariable.create("V%d,%d".formatted(i + 1, j + 1), domain, i, j));
             }
             variables.add(row);
         }
@@ -98,7 +98,7 @@ public class Sudoku {
             }
         }
 
-        return new CSP<>("Sudoku", Util.flatten2dList(variables), constraints);
+        return CSP.create("Sudoku", Util.flatten2dList(variables), constraints);
     }
 
     public static List<Integer> assignmentsToBoard(List<Assignment<Integer>> assignments, List<Integer> board) {

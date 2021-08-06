@@ -9,7 +9,6 @@ public abstract class Variable<E> {
     private final List<E> domain;
     private List<E> currDomain;
     private E value;
-//    public static final Map<Assignment, List<Assignment>> undoMap = new HashMap<>();
 
     public Variable(String name, List<E> domain) {
         this.name = name;

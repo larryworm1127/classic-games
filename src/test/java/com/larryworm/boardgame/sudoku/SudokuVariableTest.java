@@ -19,21 +19,21 @@ class SudokuVariableTest {
 
     @Test
     void getCurrDomainSize() {
-        var variable = new SudokuVariable("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
+        var variable = SudokuVariable.create("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
         assertEquals(9, variable.getCurrDomainSize(), "Incorrect domain size.");
     }
 
     @Test
     void inCurrDomain() {
-        var variable = new SudokuVariable("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
+        var variable = SudokuVariable.create("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
         assertTrue(variable.inCurrDomain(5));
         assertFalse(variable.inCurrDomain(10));
     }
 
     @Test
     void pruneValue() {
-        var var1 = new SudokuVariable("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
-        var var2 = new SudokuVariable("test2", List.of(10, 11, 12, 13, 14, 15, 16, 17, 18, 19), 0, 1);
+        var var1 = SudokuVariable.create("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
+        var var2 = SudokuVariable.create("test2", List.of(10, 11, 12, 13, 14, 15, 16, 17, 18, 19), 0, 1);
 
         var1.pruneValue(8, var2, 10, undoMap);
         assertEquals(List.of(1, 2, 3, 4, 5, 6, 7, 9), var1.getCurrDomain(), "Domain not updated correctly.");
@@ -42,8 +42,8 @@ class SudokuVariableTest {
 
     @Test
     void resetCurrDomain() {
-        var var1 = new SudokuVariable("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
-        var var2 = new SudokuVariable("test2", List.of(10, 11, 12, 13, 14, 15, 16, 17, 18, 19), 0, 1);
+        var var1 = SudokuVariable.create("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
+        var var2 = SudokuVariable.create("test2", List.of(10, 11, 12, 13, 14, 15, 16, 17, 18, 19), 0, 1);
 
         var1.pruneValue(8, var2, 10, undoMap);
         assertEquals(List.of(1, 2, 3, 4, 5, 6, 7, 9), var1.getCurrDomain(), "Domain not updated correctly.");

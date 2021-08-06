@@ -12,7 +12,7 @@ public class CSP<E> {
     private final List<Constraint<E>> constraints;
     private final Map<Integer, List<Constraint<E>>> constraintsOf;
 
-    public CSP(String name, List<? extends Variable<E>> variables, List<Constraint<E>> constraints) {
+    private CSP(String name, List<? extends Variable<E>> variables, List<Constraint<E>> constraints) {
         this.name = name;
         this.variables = new ArrayList<>(variables);
         this.constraints = new ArrayList<>(constraints);
@@ -89,8 +89,8 @@ public class CSP<E> {
             }
 
             // Set solution values to variable
-            for (var pair : solution) {
-                pair.variable().setValue(pair.value());
+            for (var assignment : solution) {
+                assignment.variable().setValue(assignment.value());
             }
 
             // Check constraints with the given solution
@@ -103,8 +103,12 @@ public class CSP<E> {
         }
 
         // Reset current values
-        currentValues.forEach(pair -> pair.variable().setValue(pair.value()));
+        currentValues.forEach(assignment -> assignment.variable().setValue(assignment.value()));
 
         return errors.isEmpty();
+    }
+
+    public static <E> CSP<E> create(String name, List<? extends Variable<E>> variables, List<Constraint<E>> constraints) {
+        return new CSP<>(name, variables, constraints);
     }
 }
