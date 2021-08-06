@@ -1,4 +1,8 @@
-package com.larryworm.boardgame.csp;
+package com.larryworm.boardgame.csp.constraints;
+
+import com.larryworm.boardgame.csp.Assignment;
+import com.larryworm.boardgame.csp.Constraint;
+import com.larryworm.boardgame.csp.Variable;
 
 import java.util.ArrayList;
 import java.util.HashSet;

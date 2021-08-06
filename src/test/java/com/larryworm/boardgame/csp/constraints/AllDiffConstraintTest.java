@@ -1,7 +1,7 @@
-package com.larryworm.boardgame.csp;
+package com.larryworm.boardgame.csp.constraints;
 
-import com.larryworm.boardgame.csp.AllDiffConstraint;
-import com.larryworm.boardgame.sudoku.SudokuVariable;
+import com.larryworm.boardgame.csp.constraints.AllDiffConstraint;
+import com.larryworm.boardgame.csp.variables.SudokuVariable;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

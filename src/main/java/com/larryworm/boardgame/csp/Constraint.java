@@ -43,6 +43,12 @@ public abstract class Constraint<E> {
         return scope.stream().filter(var -> !var.isAssigned()).toList();
     }
 
+    /**
+     * Each solution is a list of (var, value) pairs. Check to see
+     * if these satisfy all the constraints.
+     *
+     * @return true if solution satisfies all the constraints. Otherwise, return false.
+     */
     public abstract boolean check();
 
     /**
@@ -73,9 +79,9 @@ public abstract class Constraint<E> {
      *
      * @return true if it finds a suitable full assignment, false if none exist.
      */
-    static <E> boolean findValues(List<Variable<E>> remainingVars, List<Assignment<E>> assignments,
-                                  Function<List<Assignment<E>>, Boolean> finalTestFunc,
-                                  Function<List<Assignment<E>>, Boolean> partialTestFunc) {
+    protected static <E> boolean findValues(List<Variable<E>> remainingVars, List<Assignment<E>> assignments,
+                                            Function<List<Assignment<E>>, Boolean> finalTestFunc,
+                                            Function<List<Assignment<E>>, Boolean> partialTestFunc) {
         if (partialTestFunc == null) {
             partialTestFunc = (x) -> true;
         }

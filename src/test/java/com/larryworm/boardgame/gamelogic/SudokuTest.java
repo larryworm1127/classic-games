@@ -1,4 +1,4 @@
-package com.larryworm.boardgame.sudoku;
+package com.larryworm.boardgame.gamelogic;
 
 import org.junit.jupiter.api.Test;
 

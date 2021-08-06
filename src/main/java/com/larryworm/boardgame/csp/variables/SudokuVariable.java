@@ -1,4 +1,4 @@
-package com.larryworm.boardgame.sudoku;
+package com.larryworm.boardgame.csp.variables;
 
 import com.larryworm.boardgame.csp.Assignment;
 import com.larryworm.boardgame.csp.Variable;
