@@ -5,17 +5,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class UnassignedVars {
+public class UnassignedVars<E> {
 
-    private final SudokuCSP csp;
-    private final List<Variable> unassigned;
+    private final CSP<E> csp;
+    private final List<Variable<E>> unassigned;
 
-    public UnassignedVars(SudokuCSP csp) {
+    public UnassignedVars(CSP<E> csp) {
         this.csp = csp;
         this.unassigned = new ArrayList<>(csp.getVariables());
     }
 
-    public Variable extract() {
+    public Variable<E> extract() {
         if (unassigned.isEmpty()) {
             return null;
         }
@@ -28,7 +28,7 @@ public class UnassignedVars {
         return unassigned.isEmpty();
     }
 
-    public void insert(Variable variable) {
+    public void insert(Variable<E> variable) {
         if (!csp.getVariables().contains(variable)) {
             var msg = "Error, trying to insert variable %s in unassigned that is not in the CSP problem";
             System.out.printf((msg) + "%n", variable.getName());

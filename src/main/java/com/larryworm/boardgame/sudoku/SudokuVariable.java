@@ -1,8 +1,10 @@
 package com.larryworm.boardgame.sudoku;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class SudokuVariable extends Variable {
+public class SudokuVariable extends Variable<Integer> {
 
     private final int row;
     private final int col;
@@ -19,5 +21,9 @@ public class SudokuVariable extends Variable {
 
     public int getCol() {
         return col;
+    }
+
+    public static Map<Assignment<Integer>, List<Assignment<Integer>>> getNewUndoMap() {
+        return new HashMap<>();
     }
 }

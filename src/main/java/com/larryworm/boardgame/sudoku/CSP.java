@@ -1,20 +1,18 @@
 package com.larryworm.boardgame.sudoku;
 
-import com.larryworm.boardgame.Util;
 import org.javatuples.Pair;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 
-public class SudokuCSP {
+public class CSP<E> {
 
     private final String name;
-    private final List<Variable> variables;
-    private final List<Constraint> constraints;
-    private final Map<Integer, List<Constraint>> constraintsOf;
+    private final List<Variable<E>> variables;
+    private final List<Constraint<E>> constraints;
+    private final Map<Integer, List<Constraint<E>>> constraintsOf;
 
-    public SudokuCSP(String name, List<Variable> variables, List<Constraint> constraints) {
+    public CSP(String name, List<? extends Variable<E>> variables, List<Constraint<E>> constraints) {
         this.name = name;
         this.variables = new ArrayList<>(variables);
         this.constraints = new ArrayList<>(constraints);
@@ -33,7 +31,7 @@ public class SudokuCSP {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", SudokuCSP.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", CSP.class.getSimpleName() + "[", "]")
             .add("name='" + name + "'")
             .add("variables=" + variables)
             .add("constraints=" + constraints)
@@ -45,15 +43,15 @@ public class SudokuCSP {
         return name;
     }
 
-    public List<Variable> getVariables() {
+    public List<Variable<E>> getVariables() {
         return new ArrayList<>(variables);
     }
 
-    public List<Constraint> getConstraints() {
+    public List<Constraint<E>> getConstraints() {
         return new ArrayList<>(constraints);
     }
 
-    public List<Constraint> getConstraintsOfVar(Variable var) {
+    public List<Constraint<E>> getConstraintsOfVar(Variable<E> var) {
         int index = variables.indexOf(var);
         if (index == -1) {
             String errorMsg = "Error: tried to find constraint of variable %s that isn't in this CSP %s".formatted(var, name);
@@ -67,10 +65,10 @@ public class SudokuCSP {
         variables.forEach(Variable::unAssign);
     }
 
-    public boolean checkSolution(List<List<Assignment>> solutions) {
+    public boolean checkSolution(List<List<Assignment<E>>> solutions) {
         // Save current value to restore later
-        var currentValues = variables.stream().map(var -> new Assignment(var, var.getValue()));
-        var errors = new ArrayList<Pair<List<Assignment>, String>>();
+        var currentValues = variables.stream().map(var -> Assignment.with(var, var.getValue()));
+        var errors = new ArrayList<Pair<List<Assignment<E>>, String>>();
 
         for (var solution : solutions) {
             var solutionVars = solution.stream().map(Assignment::variable).toList();
@@ -92,7 +90,7 @@ public class SudokuCSP {
 
             // Set solution values to variable
             for (var pair : solution) {
-                pair.variable().setValue((Integer) pair.value());
+                pair.variable().setValue(pair.value());
             }
 
             // Check constraints with the given solution
@@ -105,45 +103,8 @@ public class SudokuCSP {
         }
 
         // Reset current values
-        currentValues.forEach(pair -> pair.variable().setValue((Integer) pair.value()));
+        currentValues.forEach(pair -> pair.variable().setValue(pair.value()));
 
         return errors.isEmpty();
-    }
-
-    public static SudokuCSP getInstance(List<List<Integer>> initialBoard) {
-        // Define variables for SudokuCSP
-        var variables = new Variable[Sudoku.DIM][Sudoku.DIM];
-        for (int i = 0; i < Sudoku.DIM; i++) {
-            for (int j = 0; j < Sudoku.DIM; j++) {
-                var col = initialBoard.get(i).get(j);
-                var domain = (col == 0) ? Sudoku.SUDOKU_NUMS : List.of(col);
-                var variable = new SudokuVariable("V%d,%d".formatted(i + 1, j + 1), domain, i, j);
-                variables[i][j] = variable;
-            }
-        }
-
-        /* Define constraints */
-        var constraints = new ArrayList<Constraint>();
-
-        // Row constraints
-        Arrays.stream(variables).forEach(row -> constraints.add(new AllDiffConstraint("row_alldiff", List.of(row))));
-
-        // Column constraints
-        IntStream.range(0, Sudoku.DIM).forEach(index -> {
-            var scope = Arrays.stream(variables).map(row -> row[index]).toList();
-            constraints.add(new AllDiffConstraint("col_alldiff", scope));
-        });
-
-        // Box constraints
-        for (int i : List.of(0, 3, 6)) {
-            for (int j : List.of(0, 3, 6)) {
-                var scope = new ArrayList<Variable>();
-                IntStream.range(0, 3).forEach(k -> IntStream.range(0, 3).forEach(l -> scope.add(variables[i + k][j + l])));
-                constraints.add(new AllDiffConstraint("box_alldiff", scope));
-            }
-        }
-
-        var flattenedVars = Util.flatten2dArray(variables);
-        return new SudokuCSP("Sudoku", flattenedVars, constraints);
     }
 }

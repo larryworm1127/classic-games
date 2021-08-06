@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AllDiffConstraint extends Constraint {
+public class AllDiffConstraint<E> extends Constraint<E> {
 
-    public AllDiffConstraint(String name, List<Variable> scope) {
+    public AllDiffConstraint(String name, List<? extends Variable<E>> scope) {
         super(name, scope);
     }
 
@@ -18,7 +18,7 @@ public class AllDiffConstraint extends Constraint {
     }
 
     @Override
-    public boolean hasSupport(Variable var, Integer val) {
+    public boolean hasSupport(Variable<E> var, E val) {
         if (!getScope().contains(var)) {
             return true;  // var=val has support on any constraint it does not participate in
         }
@@ -27,7 +27,7 @@ public class AllDiffConstraint extends Constraint {
         varsToAssign.remove(var);
         return Constraint.findValues(
             varsToAssign,
-            new ArrayList<>(List.of(new Assignment(var, val))),
+            new ArrayList<>(List.of(Assignment.with(var, val))),
             AllDiffConstraint::valuesNotEqual,
             AllDiffConstraint::valuesNotEqual
         );
@@ -37,7 +37,7 @@ public class AllDiffConstraint extends Constraint {
      * Tests a list of assignments which are pairs (var, val) to see if they can
      * satisfy the all diff constraint.
      */
-    private static boolean valuesNotEqual(List<Assignment> list) {
+    private static <E> boolean valuesNotEqual(List<Assignment<E>> list) {
         var values = list.stream().map(Assignment::value).toList();
         return Set.copyOf(values).size() == values.size();
     }

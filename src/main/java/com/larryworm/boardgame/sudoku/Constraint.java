@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
-public abstract class Constraint {
+public abstract class Constraint<E> {
 
     private final String name;
-    private final List<Variable> scope;
+    private final List<Variable<E>> scope;
 
-    public Constraint(String name, List<Variable> scope) {
+    public Constraint(String name, List<? extends Variable<E>> scope) {
         this.name = name;
         this.scope = new ArrayList<>(scope);
     }
@@ -23,7 +23,7 @@ public abstract class Constraint {
             .toString();
     }
 
-    public List<Variable> getScope() {
+    public List<Variable<E>> getScope() {
         return new ArrayList<>(scope);
     }
 
@@ -39,7 +39,7 @@ public abstract class Constraint {
         return (int) scope.stream().filter(var -> !var.isAssigned()).count();
     }
 
-    public List<Variable> getUnAssignedVars() {
+    public List<Variable<E>> getUnAssignedVars() {
         return scope.stream().filter(var -> !var.isAssigned()).toList();
     }
 
@@ -51,7 +51,7 @@ public abstract class Constraint {
      *
      * @return true if var=val has a support. Otherwise, return false.
      */
-    public abstract boolean hasSupport(Variable var, Integer val);
+    public abstract boolean hasSupport(Variable<E> var, E val);
 
     /**
      * Utility function for finding an assignment to the variables of a
@@ -73,9 +73,9 @@ public abstract class Constraint {
      *
      * @return true if it finds a suitable full assignment, false if none exist.
      */
-    static boolean findValues(List<Variable> remainingVars, List<Assignment> assignments,
-                              Function<List<Assignment>, Boolean> finalTestFunc,
-                              Function<List<Assignment>, Boolean> partialTestFunc) {
+    static <E> boolean findValues(List<Variable<E>> remainingVars, List<Assignment<E>> assignments,
+                                  Function<List<Assignment<E>>, Boolean> finalTestFunc,
+                                  Function<List<Assignment<E>>, Boolean> partialTestFunc) {
         if (partialTestFunc == null) {
             partialTestFunc = (x) -> true;
         }
@@ -91,17 +91,17 @@ public abstract class Constraint {
      *
      * @return true if it finds a suitable full assignment, false if none exist.
      */
-    private static boolean findValuesHelper(List<Variable> remainingVars, List<Assignment> assignments,
-                                            Function<List<Assignment>, Boolean> finalTestFunc,
-                                            Function<List<Assignment>, Boolean> partialTestFunc) {
+    private static <E> boolean findValuesHelper(List<Variable<E>> remainingVars, List<Assignment<E>> assignments,
+                                                Function<List<Assignment<E>>, Boolean> finalTestFunc,
+                                                Function<List<Assignment<E>>, Boolean> partialTestFunc) {
         if (remainingVars.isEmpty()) {
             return finalTestFunc.apply(assignments);
         }
 
         var variable = remainingVars.get(remainingVars.size() - 1);
         remainingVars.remove(remainingVars.size() - 1);
-        for (Integer val : variable.getCurrDomain()) {
-            assignments.add(new Assignment(variable, val));
+        for (E val : variable.getCurrDomain()) {
+            assignments.add(Assignment.with(variable, val));
             if (partialTestFunc.apply(assignments)) {
                 if (findValuesHelper(remainingVars, assignments, finalTestFunc, partialTestFunc)) {
                     return true;

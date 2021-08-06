@@ -11,10 +11,10 @@ class AllDiffConstraintTest {
     @Test
     void testGetters() {
         var scope = List.of(
-            new Variable("test1", List.of(1, 2, 3)),
-            new Variable("test2", List.of(4, 5, 6))
+            new SudokuVariable("test1", List.of(1, 2, 3), 0, 1),
+            new SudokuVariable("test2", List.of(4, 5, 6), 0, 0)
         );
-        var constraint = new AllDiffConstraint("constraint1", scope);
+        var constraint = new AllDiffConstraint<>("constraint1", scope);
         assertEquals(scope, constraint.getScope());
         assertEquals("constraint1", constraint.getName());
     }
@@ -22,20 +22,20 @@ class AllDiffConstraintTest {
     @Test
     void getArity() {
         var scope = List.of(
-            new Variable("test1", List.of(1, 2, 3)),
-            new Variable("test2", List.of(4, 5, 6))
+            new SudokuVariable("test1", List.of(1, 2, 3), 0, 1),
+            new SudokuVariable("test2", List.of(4, 5, 6), 0, 0)
         );
-        var constraint = new AllDiffConstraint("constraint1", scope);
+        var constraint = new AllDiffConstraint<>("constraint1", scope);
         assertEquals(2, constraint.getArity());
     }
 
     @Test
     void getNumUnassigned() {
         var scope = List.of(
-            new Variable("test1", List.of(1, 2, 3)),
-            new Variable("test2", List.of(4, 5, 6))
+            new SudokuVariable("test1", List.of(1, 2, 3), 0, 1),
+            new SudokuVariable("test2", List.of(4, 5, 6), 0, 0)
         );
-        var constraint = new AllDiffConstraint("constraint1", scope);
+        var constraint = new AllDiffConstraint<>("constraint1", scope);
         assertEquals(2, constraint.getNumUnassigned());
 
         scope.get(0).setValue(3);
@@ -51,9 +51,9 @@ class AllDiffConstraintTest {
 
     @Test
     void getUnAssignedVars() {
-        var var1 = new Variable("test1", List.of(1, 2, 3));
-        var var2 = new Variable("test2", List.of(4, 5, 6));
-        var constraint = new AllDiffConstraint("constraint1", List.of(var1, var2));
+        var var1 = new SudokuVariable("test1", List.of(1, 2, 3), 0, 1);
+        var var2 = new SudokuVariable("test2", List.of(4, 5, 6), 0, 0);
+        var constraint = new AllDiffConstraint<>("constraint1", List.of(var1, var2));
         assertEquals(List.of(var1, var2), constraint.getUnAssignedVars());
 
         var1.setValue(2);
@@ -69,9 +69,9 @@ class AllDiffConstraintTest {
 
     @Test
     void check() {
-        var var1 = new Variable("test1", List.of(1, 2, 3));
-        var var2 = new Variable("test2", List.of(1, 2, 3));
-        var constraint = new AllDiffConstraint("constraint1", List.of(var1, var2));
+        var var1 = new SudokuVariable("test1", List.of(1, 2, 3), 0, 1);
+        var var2 = new SudokuVariable("test2", List.of(1, 2, 3), 0, 0);
+        var constraint = new AllDiffConstraint<>("constraint1", List.of(var1, var2));
         assertFalse(constraint.check(), "Check failed when all scope vars are unassigned.");
 
         var1.setValue(2);

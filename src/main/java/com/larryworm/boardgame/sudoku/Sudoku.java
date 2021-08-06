@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Sudoku {
@@ -41,7 +42,7 @@ public class Sudoku {
         return str.toString();
     }
 
-    public static Optional<List<Assignment>> solveSudoku(List<Integer> board) {
+    public static Optional<List<Assignment<Integer>>> solveSudoku(List<Integer> board) {
         // Format board into 2d list
         List<List<Integer>> board2d = new ArrayList<>();
         int index = 0;
@@ -55,18 +56,56 @@ public class Sudoku {
         }
 
         // Create CSP and solve using backtrack search
-        var csp = SudokuCSP.getInstance(board2d);
-        var solutions = Algorithms.backtrackSearch(csp, false, false);
+        var csp = Sudoku.getInstance(board2d);
+        var undoMap = SudokuVariable.getNewUndoMap();
+        var solutions = Algorithms.backtrackSearch(csp, false, false, undoMap);
         return (solutions.isEmpty() || !csp.checkSolution(solutions)) ?
             Optional.empty() :
             Optional.of(solutions.get(0));
     }
 
-    public static List<Integer> assignmentsToBoard(List<Assignment> assignments, List<Integer> board) {
+    public static CSP<Integer> getInstance(List<List<Integer>> initialBoard) {
+        /* Define variables for SudokuCSP */
+        var variables = new ArrayList<List<SudokuVariable>>();
+        for (int i = 0; i < Sudoku.DIM; i++) {
+            var row = new ArrayList<SudokuVariable>();
+            for (int j = 0; j < Sudoku.DIM; j++) {
+                var num = initialBoard.get(i).get(j);
+                var domain = (num == 0) ? Sudoku.SUDOKU_NUMS : List.of(num);
+                row.add(new SudokuVariable("V%d,%d".formatted(i + 1, j + 1), domain, i, j));
+            }
+            variables.add(row);
+        }
+
+        /* Define constraints */
+        var constraints = new ArrayList<Constraint<Integer>>();
+
+        // Row constraints
+        variables.forEach(row -> constraints.add(new AllDiffConstraint<>("row_alldiff", row)));
+
+        // Column constraints
+        IntStream.range(0, Sudoku.DIM).forEach(index -> {
+            var scope = variables.stream().map(row -> row.get(index)).toList();
+            constraints.add(new AllDiffConstraint<>("col_alldiff", scope));
+        });
+
+        // Box constraints
+        for (int i : List.of(0, 3, 6)) {
+            for (int j : List.of(0, 3, 6)) {
+                var scope = new ArrayList<Variable<Integer>>();
+                IntStream.range(0, 3).forEach(k -> IntStream.range(0, 3).forEach(l -> scope.add(variables.get(i + k).get(j + l))));
+                constraints.add(new AllDiffConstraint<>("box_alldiff", scope));
+            }
+        }
+
+        return new CSP<>("Sudoku", Util.flatten2dList(variables), constraints);
+    }
+
+    public static List<Integer> assignmentsToBoard(List<Assignment<Integer>> assignments, List<Integer> board) {
         var result = new ArrayList<>(board);
         for (var assignment : assignments) {
             SudokuVariable var = (SudokuVariable) assignment.variable();
-            result.set(var.getRow() * Sudoku.DIM + var.getCol(), (Integer) assignment.value());
+            result.set(var.getRow() * Sudoku.DIM + var.getCol(), assignment.value());
         }
         return result;
     }

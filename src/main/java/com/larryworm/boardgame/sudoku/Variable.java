@@ -1,19 +1,17 @@
 package com.larryworm.boardgame.sudoku;
 
-import org.javatuples.Pair;
-
 import java.util.*;
 
 
-public class Variable {
+public abstract class Variable<E> {
 
     private final String name;
-    private List<Integer> domain;
-    private List<Integer> currDomain;
-    private Integer value;
-    public static final Map<Pair<Variable, Integer>, List<Pair<Variable, Integer>>> undoMap = new HashMap<>();
+    private final List<E> domain;
+    private List<E> currDomain;
+    private E value;
+//    public static final Map<Assignment, List<Assignment>> undoMap = new HashMap<>();
 
-    public Variable(String name, List<Integer> domain) {
+    public Variable(String name, List<E> domain) {
         this.name = name;
         this.domain = new ArrayList<>(domain);
         this.currDomain = new ArrayList<>(domain);
@@ -34,19 +32,15 @@ public class Variable {
         return name;
     }
 
-    public List<Integer> getDomain() {
+    public List<E> getDomain() {
         return new ArrayList<>(domain);
     }
 
-    public void setDomain(List<Integer> domain) {
-        this.domain = new ArrayList<>(domain);
-    }
-
-    public Integer getValue() {
+    public E getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(E value) {
         if (value != null && !domain.contains(value)) {
             String errorFormat = "Error: tried to assign value %s to variable %s that is not in %s's domain";
             System.out.printf((errorFormat) + "%n", value, name, name);
@@ -55,7 +49,7 @@ public class Variable {
         }
     }
 
-    public List<Integer> getCurrDomain() {
+    public List<E> getCurrDomain() {
         if (isAssigned()) {
             return new ArrayList<>(List.of(value));
         }
@@ -77,14 +71,14 @@ public class Variable {
         return currDomain.size();
     }
 
-    public boolean inCurrDomain(int value) {
+    public boolean inCurrDomain(E value) {
         if (isAssigned()) {
             return Objects.equals(value, this.value);
         }
         return currDomain.contains(value);
     }
 
-    public void pruneValue(Integer value, Variable reasonVar, Integer reasonVal) {
+    public void pruneValue(E value, Variable<E> reasonVar, E reasonVal, Map<Assignment<E>, List<Assignment<E>>> undoMap) {
         if (currDomain.size() == 0) {
             String errorFormat = "Error: tried to prune value {} from variable {}'s domain, but value not present!";
             System.out.printf((errorFormat) + "%n", value, name);
@@ -94,14 +88,14 @@ public class Variable {
         currDomain.remove(value);
 
         // Add reason to remove <value> in undo map
-        var key = Pair.with(reasonVar, reasonVal);
+        var key = Assignment.with(reasonVar, reasonVal);
         if (!undoMap.containsKey(key)) {
             undoMap.put(key, new ArrayList<>());
         }
-        undoMap.get(key).add(Pair.with(this, value));
+        undoMap.get(key).add(Assignment.with(this, value));
     }
 
-    public void restoreValue(Integer value) {
+    public void restoreValue(E value) {
         currDomain.add(value);
     }
 
@@ -114,15 +108,15 @@ public class Variable {
         unAssign();
     }
 
-    public static void clearUndoMap() {
+    public static <E> void clearUndoMap(Map<Assignment<E>, List<Assignment<E>>> undoMap) {
         undoMap.clear();
     }
 
-    public static void restoreValues(Variable reasonVar, Integer reasonVal) {
-        var key = new Pair<>(reasonVar, reasonVal);
+    public static <E> void restoreValues(Variable<E> reasonVar, E reasonVal, Map<Assignment<E>, List<Assignment<E>>> undoMap) {
+        var key = Assignment.with(reasonVar, reasonVal);
         if (undoMap.containsKey(key)) {
             for (var item : undoMap.get(key)) {
-                item.getValue0().restoreValue(item.getValue1());
+                item.variable().restoreValue(item.value());
             }
             undoMap.remove(key);
         }

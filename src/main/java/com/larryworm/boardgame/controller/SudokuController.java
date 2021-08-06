@@ -19,7 +19,7 @@ public class SudokuController {
     }
 
     @GetMapping("/sudoku/hints")
-    Optional<List<Assignment>> getHintsFromCurrBoard(@RequestParam List<Integer> board) {
+    Optional<List<Assignment<Integer>>> getHintsFromCurrBoard(@RequestParam List<Integer> board) {
         List<Integer> emptyCells = new ArrayList<>();
         for (int i = 0; i < Sudoku.DIM * Sudoku.DIM; i++) {
             if (board.get(i) == 0) {
