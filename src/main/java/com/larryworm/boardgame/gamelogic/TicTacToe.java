@@ -3,6 +3,7 @@ package com.larryworm.boardgame.gamelogic;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
+import java.util.List;
 import java.util.Map;
 
 public class TicTacToe {
@@ -12,6 +13,17 @@ public class TicTacToe {
         GameState.PLAYERX_WIN, -1,
         GameState.DRAW, 0
     );
+
+    public static Pair<Integer, Integer> getMove(List<TicTacToeState> board, TicTacToeState player) {
+        var boardContent = new TicTacToeState[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                boardContent[i][j] = board.get(i * 3 + j);
+            }
+        }
+        var gameBoard = GameBoard.create(3, boardContent);
+        return getMove(gameBoard, player);
+    }
 
     public static Pair<Integer, Integer> getMove(GameBoard board, TicTacToeState player) {
         var result = alphaBetaPruning(board, player, -2, 2);
