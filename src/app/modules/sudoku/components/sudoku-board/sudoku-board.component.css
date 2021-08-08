@@ -1,0 +1,69 @@
+/* Mobile Styles */
+@media only screen and (max-width: 521px) {
+  /* Game Grid */
+  .game {
+    background-color: transparent;
+    width: 288px;
+    height: 288px;
+    margin: 30px auto;
+  }
+
+  /* Section Align */
+  #messages {
+    text-align: center;
+  }
+}
+
+/* Small Tablet Styles */
+@media only screen and (min-width: 522px) and (max-width: 767px) {
+  /* Game Grid */
+  .game {
+    background-color: transparent;
+    width: 450px;
+    height: 450px;
+    margin: 30px auto;
+  }
+
+  /* Section Align */
+  #messages {
+    text-align: center;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  /* Game Grid */
+  .game {
+    background-color: transparent;
+    width: 360px;
+    height: 360px;
+    margin: 30px auto;
+  }
+}
+
+/* Bigger Tablet Styles */
+@media only screen and (min-width: 993px) and (max-width: 1023px) {
+  /* Game Grid */
+  .game {
+    background-color: transparent;
+    width: 495px;
+    height: 495px;
+    margin: 30px auto;
+  }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 1024px) {
+  /* Game Grid */
+  .game {
+    background-color: transparent;
+    width: 540px;
+    height: 540px;
+    margin: 30px auto;
+  }
+
+  /* Section Align */
+  #messages {
+    text-align: left;
+  }
+}

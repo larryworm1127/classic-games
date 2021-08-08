@@ -1,0 +1,87 @@
+/* Mobile Styles */
+@media only screen and (max-width: 521px) {
+  /* Numpad */
+  #num-pad-top {
+    padding-top: 15px;
+  }
+
+  #num-pad-top-sec {
+    display: inline;
+  }
+
+  #num-pad-vert {
+    display: none;
+  }
+
+  #num-pad-bot {
+    display: none;
+  }
+}
+
+/* Small Tablet Styles */
+@media only screen and (min-width: 522px) and (max-width: 767px) {
+  /* Numpad */
+  #num-pad-top {
+    padding-top: 15px;
+  }
+
+  #num-pad-top-sec {
+    display: inline;
+  }
+
+  #num-pad-vert {
+    display: none;
+  }
+
+  #num-pad-bot {
+    display: none;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  /* Numpad */
+  #num-pad-top {
+    display: none;
+  }
+
+  #num-pad-vert {
+    display: none;
+  }
+
+  #num-pad-bot {
+    display: inline;
+  }
+}
+
+/* Bigger Tablet Styles */
+@media only screen and (min-width: 993px) and (max-width: 1023px) {
+  /* Numpad */
+  #num-pad-top {
+    display: none;
+  }
+
+  #num-pad-vert {
+    display: none;
+  }
+
+  #num-pad-bot {
+    display: inline;
+  }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 1024px) {
+  /* Numpad */
+  #num-pad-top {
+    display: none;
+  }
+
+  #num-pad-vert {
+    width: 10%;
+  }
+
+  #num-pad-bot {
+    display: none;
+  }
+}

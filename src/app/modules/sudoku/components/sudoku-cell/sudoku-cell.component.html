@@ -1,0 +1,12 @@
+<div id="square{{cell.id}}"
+     class="game-field text-center"
+     [ngClass]="{'selected': cell.isSelected}"
+     (click)="onSelect()"
+>
+  <p [ngClass]="{'pencil': cell.isPencil,
+                 'not-pencil': cell.isFixed && !cell.hasError,
+                 'player': !cell.isPencil && !cell.isFixed && !cell.hasError,
+                 'error': cell.hasError}">
+    {{cell.value}}
+  </p>
+</div>

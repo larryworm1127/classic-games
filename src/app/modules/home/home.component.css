@@ -1,0 +1,48 @@
+body {
+  background: #f4fff0;
+}
+
+.card-body, .text-content {
+  font-size: 115%
+}
+
+
+/* Mobile Styles */
+@media only screen and (max-width: 425px) {
+  #outer-container {
+    width: 100%
+  }
+
+  .table {
+    font-size: 60%;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 426px) and (max-width: 896px) {
+  #outer-container {
+    width: 100%
+  }
+
+  .table {
+    font-size: 80%;
+  }
+}
+
+/* Laptop Styles */
+@media only screen and (min-width: 897px) and (max-width: 1124px) {
+  #outer-container {
+    width: 100%
+  }
+
+  .table {
+    font-size: 100%;
+  }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 1125px) {
+  #outer-container {
+    width: 86%
+  }
+}

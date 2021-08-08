@@ -1,0 +1,81 @@
+/*
+square0 | square1 | square2
+square3 | square4 | square5
+square6 | square7 | square8
+ */
+
+/* Game Grid */
+#square0, #square1, #square2 {
+  border-bottom: 3px solid #525B76;
+}
+
+#square1 {
+  border-left: 3px solid #525B76;
+  border-right: 3px solid #525B76;
+}
+
+#square3, #square4, #square5 {
+  border-bottom: 3px solid #525B76;
+}
+
+#square4 {
+  border-left: 3px solid #525B76;
+  border-right: 3px solid #525B76;
+}
+
+#square7 {
+  border-left: 3px solid #525B76;
+  border-right: 3px solid #525B76;
+}
+
+/* Game Character */
+.circle {
+  color: slategrey;
+  position: relative;
+  right: 16%;
+  line-height: 1.25em;
+  bottom: 5px;
+}
+
+.cross {
+  color: slategrey;
+  position: relative;
+  line-height: 1.25em;
+}
+
+@media only screen and (max-width: 425px) {
+  .game-field {
+    width: 89px;
+    height: 89px;
+    display: block;
+    float: left;
+    color: #EAEAEA;
+    font-size: 4em;
+    padding: 1px 19px;
+  }
+}
+
+@media only screen and (min-width: 426px) and (max-width: 1023px) {
+  .game-field {
+    width: 111px;
+    height: 111px;
+    display: block;
+    float: left;
+    color: #EAEAEA;
+    font-size: 5em;
+    padding: 1px 23px;
+  }
+}
+
+
+@media only screen and (min-width: 1024px) {
+  .game-field {
+    width: 134px;
+    height: 134px;
+    display: block;
+    float: left;
+    color: #EAEAEA;
+    font-size: 6.3em;
+    padding: 1px 27px;
+  }
+}

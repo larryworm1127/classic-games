@@ -1,0 +1,11 @@
+<a class="pencil-toggle" role="button" id="pencil-toggle" (click)="togglePencil()">
+  <i class="fas fa-pencil-alt fa-2x m-1"></i>Pencil
+</a>
+<div class="space"></div>
+<a class="erase" role="button" id="erase" (click)="boardService.erase()">
+  <i class="fas fa-eraser fa-2x m-1"></i>Erase
+</a>
+<div class="space"></div>
+<a class="undo" role="button" id="undo" (click)="boardService.undo()">
+  <i class="fas fa-undo fa-2x m-1"></i>Undo
+</a>

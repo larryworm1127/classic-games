@@ -1,0 +1,47 @@
+#surrender {
+  color: limegreen;
+}
+
+#surrender:hover {
+  color: #1e7e34;
+}
+
+
+/* Mobile Styles */
+@media only screen and (max-width: 425px) {
+  /* Section Align */
+  #messages {
+    text-align: center;
+  }
+
+  /* Icon Sizes */
+  #surr-icon {
+    font-size: 3em;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 426px) and (max-width: 1023px) {
+  /* Section Align */
+  #messages {
+    text-align: center;
+  }
+
+  /* Icon Sizes */
+  #surr-icon {
+    font-size: 3em;
+  }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 1024px) {
+  /* Section Align */
+  #messages {
+    text-align: left;
+  }
+
+  /* Icon Sizes */
+  #surr-icon {
+    font-size: 5em;
+  }
+}

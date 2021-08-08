@@ -1,0 +1,18 @@
+.side-col {
+  margin-top: 50px
+}
+
+
+/* Mobile Styles */
+@media only screen and (max-width: 425px) {
+  #icons {
+    display: block;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 426px) and (max-width: 1023px) {
+  #icons {
+    display: inline-block;
+  }
+}
