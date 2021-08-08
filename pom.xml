@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.larryworm</groupId>
-    <artifactId>board-game</artifactId>
+    <artifactId>classic-games</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>board-game</name>
-    <description>board-game</description>
+    <name>classic-games</name>
+    <description>classic-games</description>
     <properties>
         <java.version>16</java.version>
     </properties>
