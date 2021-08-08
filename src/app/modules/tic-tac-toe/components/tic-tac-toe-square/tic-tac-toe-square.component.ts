@@ -18,8 +18,8 @@ export class TicTacToeSquareComponent implements OnInit {
   }
 
   makeMove(): void {
-    if (this.gameService.gameState == GameStates.Running && this.square.state === Players.Empty) {
-      this.square.state = this.gameService.gameTurn;
+    if (this.gameService.currentState == GameStates.Running && this.square.state === Players.Empty) {
+      this.square.state = this.gameService.currentTurn;
       this.gameService.makeMove(this.square);
     }
   }
