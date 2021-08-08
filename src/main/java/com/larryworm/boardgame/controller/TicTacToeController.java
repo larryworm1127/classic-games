@@ -1,6 +1,5 @@
 package com.larryworm.boardgame.controller;
 
-import com.larryworm.boardgame.gamelogic.GameBoard;
 import com.larryworm.boardgame.gamelogic.TicTacToe;
 import com.larryworm.boardgame.gamelogic.TicTacToeState;
 import org.javatuples.Pair;
