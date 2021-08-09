@@ -7,10 +7,10 @@
       "jasmine"
     ]
   },
-  "files": [
-    "test.ts",
-    "polyfills.ts"
-  ],
+//  "files": [
+//    "test.ts",
+//    "polyfills.ts"
+//  ],
   "include": [
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
