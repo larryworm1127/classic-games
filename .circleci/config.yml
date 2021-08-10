@@ -20,6 +20,7 @@ jobs:
           node --version
           java --version
           google-chrome --version
+          export CHROME_BIN=/usr/bin/google-chrome
           env | grep CHROME_BIN
       # Use mvn clean and package as the standard maven build phase
       - run:
