@@ -13,7 +13,7 @@ export class TicTacToeService {
 
   private gameBoard: TicTacToeBoard;
   private gameType: GameModes = GameModes.Pvp;
-  private computer: Players = Players.Empty;
+  computer: Players = Players.Empty;
   currentTurn: Players = Players.PlayerX;
   currentState: GameStates = GameStates.Stopped;
   message: string = 'Who starts?';
