@@ -12,7 +12,7 @@ export class SudokuServerService {
   private readonly sudokuUrl: string;
 
   constructor(private http: HttpClient) {
-    this.sudokuUrl = 'http://localhost:8080/sudoku';
+    this.sudokuUrl = 'sudoku';
   }
 
   public getNewBoard(difficulty: Difficulty): Observable<number[]> {
