@@ -1,27 +1,16 @@
-# BoardGamesFrontend
+# Classic Games
+[![CircleCI](https://circleci.com/gh/larryworm1127/classic-games/tree/master.svg?style=svg)](https://circleci.com/gh/larryworm1127/classic-games/tree/master)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.4.
+## About
+This website contains a collection of games/puzzles for users to enjoy.
+The web app is built using Spring MVC, along with Angular 12.
 
-## Development server
+This is a revamp of my old project <a href="https://github.com/larryworm1127/PyBoardGame">PyBoardGame</a> with newer frameworks and technologies.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Features
+Here is a list of features that are implemented and might be implemented in the future:
+- [ ] An authentication system to show stats collected by each game/puzzle.
+- A number of simple games/puzzles for users to play:
+    - [x] Tic Tac Toe
+    - [x] Sudoko
+    - [ ] Etc.
