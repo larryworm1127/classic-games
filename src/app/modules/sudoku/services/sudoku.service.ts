@@ -43,6 +43,9 @@ export class SudokuService {
 
   newGame(): void {
     this.gameState = GameStates.GameRunning;
+    this.numHints = 0;
+    this.numUndo = 0;
+    this.pencilEnabled = false;
 
     this.serverService.getNewBoard(this.difficulty).subscribe(data => {
       this.gameBoard.boardContent = data.map((value, index) =>
