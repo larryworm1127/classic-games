@@ -25,33 +25,26 @@
 
   <div class="jumbotron">
     <div class="container subheader">
-      <h1>Classic Board Games Collection</h1>
+      <h1>Classic Games and Puzzles Collection</h1>
     </div>
   </div>
 
   <div class="container">
     <div class="row marketing">
       <div class="col-lg-6">
-        <h3 class="subheader">Tic Tac Toe</h3>
-        <p class="text-content">Interactive Tic Tac Toe game where the user can choose to either play against other
-          human players or choose to play against the UNBEATABLE computer player! Learn more about
-          Tic Tac Toe game in the "About" page. </p>
-
-        <h3 class="subheader">Sudoku</h3>
-        <p class="text-content">Interactive Sudoku game where the user can play various levels of difficulty
-          of Sudoku puzzles with various game stats that keeps track of how the players are doing.
-          Learn more about Sudoku game in the "About" page. </p>
+        <h3 class="subheader" [routerLink]="['/ttt']">Tic Tac Toe</h3>
+        <p class="text-content">
+          Interactive Tic Tac Toe game where the user can choose to either play against other
+          human players or choose to play against the unbeatable computer player.
+        </p>
       </div>
 
       <div class="col-lg-6">
-        <h3 class="subheader">Blackjack</h3>
-        <p class="text-content">Interactive Blackjack game where the user can choose to either play against other human
-          players or choose to play against a simple computer player who is also the host of the game!. Learn more about
-          Blackjack game in the "About" page. </p>
-
-        <h3 class="subheader">2048</h3>
-        <p class="text-content">Interactive 2048 game that allows the user to experience the exciting puzzle of 2048.
-          Learn more about 2048 game in the "About" page.</p>
+        <h3 class="subheader" [routerLink]="['/sudoku']">Sudoku</h3>
+        <p class="text-content">
+          Interactive Sudoku game where the user can play various levels of difficulty
+          of Sudoku puzzles with various game stats that keeps track of how the players are doing.
+        </p>
       </div>
     </div>
   </div>
