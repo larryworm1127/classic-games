@@ -12,7 +12,7 @@ export class TicTacToeServerService {
   private readonly ticTacToeUrl: string;
 
   constructor(private http: HttpClient) {
-    this.ticTacToeUrl = 'http://localhost:8080/ttt';
+    this.ticTacToeUrl = 'ttt';
   }
 
   public getNextMove(board: Square[], player: Players): Observable<any> {
