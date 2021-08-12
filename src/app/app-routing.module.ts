@@ -13,6 +13,10 @@ const routes: Routes = [
   {
     path: 'sudoku',
     loadChildren: () => import('@modules/sudoku/sudoku.module').then((m) => m.SudokuModule)
+  },
+  {
+    path: 'minesweeper',
+    loadChildren: () => import('@modules/minesweeper/minesweeper.module').then((m) => m.MinesweeperModule)
   }
 ];
 
