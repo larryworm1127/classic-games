@@ -4,7 +4,7 @@ import { SudokuService } from '@modules/sudoku/services/sudoku.service';
 @Component({
   selector: 'app-sudoku-numpad',
   templateUrl: './sudoku-numpad.component.html',
-  styleUrls: ['./sudoku-numpad.component.css']
+  styleUrls: ['./sudoku-numpad.component.scss']
 })
 export class SudokuNumpadComponent implements OnInit {
 

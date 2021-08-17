@@ -5,7 +5,7 @@ import { SudokuCell } from '@modules/sudoku/logic/sudoku-cell';
 @Component({
   selector: 'app-sudoku-cell',
   templateUrl: './sudoku-cell.component.html',
-  styleUrls: ['./sudoku-cell.component.css']
+  styleUrls: ['./sudoku-cell.component.scss']
 })
 export class SudokuCellComponent implements OnInit {
 

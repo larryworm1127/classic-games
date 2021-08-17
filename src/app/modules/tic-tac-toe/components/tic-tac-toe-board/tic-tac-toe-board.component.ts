@@ -4,7 +4,7 @@ import { TicTacToeService } from '@modules/tic-tac-toe/services/tic-tac-toe.serv
 @Component({
   selector: 'app-tic-tac-toe-board',
   templateUrl: './tic-tac-toe-board.component.html',
-  styleUrls: ['./tic-tac-toe-board.component.css']
+  styleUrls: ['./tic-tac-toe-board.component.scss']
 })
 export class TicTacToeBoardComponent implements OnInit {
 

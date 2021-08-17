@@ -6,7 +6,7 @@ import { GameStates } from '../../enums/game-states';
 @Component({
   selector: 'app-tic-tac-toe-square',
   templateUrl: './tic-tac-toe-square.component.html',
-  styleUrls: ['./tic-tac-toe-square.component.css']
+  styleUrls: ['./tic-tac-toe-square.component.scss']
 })
 export class TicTacToeSquareComponent implements OnInit {
 

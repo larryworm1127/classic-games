@@ -4,7 +4,7 @@ import { TicTacToeService } from '@modules/tic-tac-toe/services/tic-tac-toe.serv
 @Component({
   selector: 'app-tic-tac-toe-right-panel',
   templateUrl: './tic-tac-toe-right-panel.component.html',
-  styleUrls: ['./tic-tac-toe-right-panel.component.css']
+  styleUrls: ['./tic-tac-toe-right-panel.component.scss']
 })
 export class TicTacToeRightPanelComponent implements OnInit {
 

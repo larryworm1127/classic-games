@@ -4,7 +4,7 @@ import { SudokuService } from '@modules/sudoku/services/sudoku.service';
 @Component({
   selector: 'app-sudoku-controls',
   templateUrl: './sudoku-controls.component.html',
-  styleUrls: ['./sudoku-controls.component.css']
+  styleUrls: ['./sudoku-controls.component.scss']
 })
 export class SudokuControlsComponent implements OnInit {
 

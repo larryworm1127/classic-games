@@ -6,7 +6,7 @@ import { GameStates } from '@modules/sudoku/enums/game-states';
 @Component({
   selector: 'app-sudoku-win-modal',
   templateUrl: './sudoku-win-modal.component.html',
-  styleUrls: ['./sudoku-win-modal.component.css']
+  styleUrls: ['./sudoku-win-modal.component.scss']
 })
 export class SudokuWinModalComponent implements OnInit {
 

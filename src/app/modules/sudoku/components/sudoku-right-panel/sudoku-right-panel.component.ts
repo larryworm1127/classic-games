@@ -5,7 +5,7 @@ import { Difficulty } from '@modules/sudoku/enums/difficulty';
 @Component({
   selector: 'app-sudoku-right-panel',
   templateUrl: './sudoku-right-panel.component.html',
-  styleUrls: ['./sudoku-right-panel.component.css']
+  styleUrls: ['./sudoku-right-panel.component.scss']
 })
 export class SudokuRightPanelComponent implements OnInit {
 
