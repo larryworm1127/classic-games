@@ -8,6 +8,20 @@ import java.util.List;
 
 public class Minesweeper {
 
+    /**
+     * Generate a new Minesweeper game board of size {@code (width, height)} with {@code numMines}
+     * number of mines placed randomly on the board.
+     * <p>
+     * The {@code firstMove} parameter is used to prevent the case where user loss on first move.
+     * The method will generate a minesweeper board such that no mine is placed at the first move
+     * location
+     *
+     * @param width     the width of the board.
+     * @param height    the height of the board.
+     * @param numMines  the number of mines on the board.
+     * @param firstMove the first move that the player made.
+     * @return a consistent minesweeper board.
+     */
     public static int[][] generateBoard(int width, int height, int numMines, Pair<Integer, Integer> firstMove) {
         var board = new int[height][width];
 
@@ -15,7 +29,7 @@ public class Minesweeper {
         var boardCoordinates = new ArrayList<Pair<Integer, Integer>>();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (i != firstMove.getValue0() && j != firstMove.getValue1()) {
+                if (i != firstMove.getValue0() || j != firstMove.getValue1()) {
                     boardCoordinates.add(Pair.with(i, j));
                 }
             }

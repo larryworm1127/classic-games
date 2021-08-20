@@ -60,7 +60,8 @@ public class Util {
      * @return a list of size {@code numToSample} with elements from {@code data}.
      */
     public static <E> List<E> sample(List<E> data, int numToSample) {
-        Collections.shuffle(new ArrayList<>(data));
-        return data.subList(0, Math.min(numToSample, data.size()));
+        var clone = new ArrayList<>(data);
+        Collections.shuffle(clone);
+        return clone.subList(0, Math.min(numToSample, clone.size()));
     }
 }
