@@ -50,6 +50,9 @@ public class Util {
 
     /**
      * Sample {@code numToSample} number of items from {@code data}
+     * <p>
+     * If {@code numToSample} is larger than size of {@code data}, then
+     * the resulting sample will be of size of {@code data.size()}.
      *
      * @param data        list of data to sample from.
      * @param numToSample number of items to sample.
