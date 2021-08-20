@@ -3,7 +3,7 @@ package com.larryworm.classicgames.csp;
 import java.util.*;
 
 
-public abstract class Variable<E> {
+public class Variable<E> {
 
     private final String name;
     private final List<E> domain;
@@ -119,5 +119,9 @@ public abstract class Variable<E> {
             }
             undoMap.remove(key);
         }
+    }
+
+    public static <E> Variable<E> create(String name, List<E> domain) {
+        return new Variable<>(name, domain);
     }
 }

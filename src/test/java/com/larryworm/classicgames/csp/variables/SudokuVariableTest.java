@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SudokuVariableTest {
 
@@ -16,19 +17,6 @@ class SudokuVariableTest {
     @BeforeEach
     void setUp() {
         undoMap = SudokuVariable.getNewUndoMap();
-    }
-
-    @Test
-    void getCurrDomainSize() {
-        var variable = SudokuVariable.create("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
-        assertEquals(9, variable.getCurrDomainSize(), "Incorrect domain size.");
-    }
-
-    @Test
-    void inCurrDomain() {
-        var variable = SudokuVariable.create("test", List.of(1, 2, 3, 4, 5, 6, 7, 8, 9), 0, 0);
-        assertTrue(variable.inCurrDomain(5));
-        assertFalse(variable.inCurrDomain(10));
     }
 
     @Test
