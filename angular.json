@@ -82,7 +82,7 @@
               "browserTarget": "classic-games:build:production"
             },
             "development": {
-              "browserTarget": "board-games-frontend:build:development"
+              "browserTarget": "classic-games:build:development"
             }
           },
           "defaultConfiguration": "development"
