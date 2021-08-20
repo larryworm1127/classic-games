@@ -58,6 +58,6 @@ public class Util {
      */
     public static <E> List<E> sample(List<E> data, int numToSample) {
         Collections.shuffle(new ArrayList<>(data));
-        return data.subList(0, numToSample);
+        return data.subList(0, Math.min(numToSample, data.size()));
     }
 }
