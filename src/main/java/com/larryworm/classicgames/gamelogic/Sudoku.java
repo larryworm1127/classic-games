@@ -146,7 +146,11 @@ public class Sudoku {
         for (int i : List.of(0, 3, 6)) {
             for (int j : List.of(0, 3, 6)) {
                 var scope = new ArrayList<Variable<Integer>>();
-                IntStream.range(0, 3).forEach(k -> IntStream.range(0, 3).forEach(l -> scope.add(variables.get(i + k).get(j + l))));
+                for (int x = 0; x < 3; x++) {
+                    for (int y = 0; y < 3; y++) {
+                        scope.add(variables.get(i + x).get(j + y));
+                    }
+                }
                 constraints.add(new AllDiffConstraint<>("box_alldiff", scope));
             }
         }
