@@ -1,6 +1,9 @@
 package com.larryworm.classicgames.gamelogic;
 
 import com.larryworm.classicgames.Util;
+import com.larryworm.classicgames.csp.CSP;
+import com.larryworm.classicgames.csp.Constraint;
+import com.larryworm.classicgames.csp.variables.MinesweeperVariable;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
@@ -20,9 +23,9 @@ public class Minesweeper {
      * @param height    the height of the board.
      * @param numMines  the number of mines on the board.
      * @param firstMove the first move that the player made.
-     * @return a consistent minesweeper board.
+     * @return a list of integers representing a consistent minesweeper board.
      */
-    public static int[][] generateBoard(int width, int height, int numMines, Pair<Integer, Integer> firstMove) {
+    public static List<Integer> generateBoard(int width, int height, int numMines, Pair<Integer, Integer> firstMove) {
         var board = new int[height][width];
 
         // Place mines randomly throughout the board
@@ -55,7 +58,7 @@ public class Minesweeper {
         if (!isConsistent(board, width, height)) {
             return generateBoard(width, height, numMines, firstMove);
         }
-        return board;
+        return Util.flatten2dArray(board);
     }
 
     private static boolean isInBound(int row, int column, int width, int height) {
@@ -101,5 +104,30 @@ public class Minesweeper {
             }
         }
         return true;
+    }
+
+    private static CSP<Integer> getInstance(int[][] board, int width, int height) {
+        /* Define variables for Minesweeper CSP */
+        var variables = new ArrayList<List<MinesweeperVariable>>();
+        for (int i = 0; i < height; i++) {
+            var row = new ArrayList<MinesweeperVariable>();
+            for (int j = 0; j < width; j++) {
+                List<Integer> domain;
+                if (board[i][j] == 9) {  // cell is mine
+                    domain = List.of(1);
+                } else if (board[i][j] == -1) {  // cell is opened
+                    domain = List.of(0);
+                } else {
+                    domain = List.of(0, 1);
+                }
+                row.add(MinesweeperVariable.create("V%d,%d".formatted(i + 1, j + 1), domain, i, j));
+            }
+            variables.add(row);
+        }
+
+        /* Define constraints */
+        var constraints = new ArrayList<Constraint<Integer>>();
+
+        return CSP.create("Minesweeper", Util.flatten2dList(variables), constraints);
     }
 }

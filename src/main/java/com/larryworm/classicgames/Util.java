@@ -22,6 +22,13 @@ public class Util {
             .collect(Collectors.toList());
     }
 
+    public static List<Integer> flatten2dArray(int[][] array) {
+        return Arrays.stream(array)
+            .map(row -> Arrays.stream(row).boxed().toList())
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
+    }
+
     /**
      * Flattens given 2d-list of {@code E} type into a List of type {@code E}.
      *

@@ -14,6 +14,9 @@ class UtilTest {
         Integer[][] array = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         List<Integer> expected = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
         assertEquals(expected, Util.flatten2dArray(array), "2d Integer array not flattened correctly.");
+
+        int[][] array2 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        assertEquals(expected, Util.flatten2dArray(array2), "2d Integer array not flattened correctly.");
     }
 
     @Test
