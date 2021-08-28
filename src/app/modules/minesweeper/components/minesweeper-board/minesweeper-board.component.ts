@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CellModel } from "@modules/minesweeper/interfaces/cell-model";
-import { GameStates } from "@modules/minesweeper/enums/game-states";
+import { GameState } from "@modules/minesweeper/enums/game-state";
 import { Resources } from "@modules/minesweeper/enums/resources";
 import { Difficulty } from "@modules/minesweeper/enums/difficulty";
 import { delay, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
-import { BehaviorSubject, Subject, Subscription, timer } from "rxjs";
+import { Subject, Subscription, timer } from "rxjs";
 import { MinesweeperService } from "@modules/minesweeper/services/minesweeper.service";
 import { AROUND_CELL_OPERATORS } from "@modules/minesweeper/constants";
 import { BoardData } from "@modules/minesweeper/interfaces/board-data";
@@ -31,15 +31,14 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     return this.gameService.emojiFace;
   }
 
-  boardParsed: CellModel[][] = [];
-  difficulty: Difficulty = Difficulty.Easy;
-  gameState: GameStates | undefined;
-  timer = 0;
-  height: number = 9;
-  width: number = 9;
+  get difficulty(): Difficulty {
+    return this.gameService.difficulty;
+  }
 
-  private numMines: number = 10;
-  private difficulty$ = new BehaviorSubject<Difficulty>(Difficulty.Easy);
+  boardParsed: CellModel[][] = [];
+  gameState: GameState | undefined;
+  timer = 0;
+
   // @ts-ignore
   private timerSub: Subscription | null;
   private unsubscribeAll: Subject<any>;
@@ -61,45 +60,23 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.difficulty$
-        .pipe(takeUntil(this.unsubscribeAll))
-        .subscribe(difficultySelected => {
-          switch (difficultySelected) {
-            case Difficulty.Easy:
-              this.width = 9;
-              this.height = 9;
-              this.numMines = 10;
-              break;
-            case Difficulty.Medium:
-              this.width = 16;
-              this.height = 16;
-              this.numMines = 40;
-              break;
-            case Difficulty.Hard:
-              this.width = 16;
-              this.height = 30;
-              this.numMines = 99;
-          }
-
-          this.difficulty = difficultySelected;
-          this.createNewEmptyBoard();
-        });
+    this.createNewEmptyBoard();
 
     this.gameService.gameState$
         .pipe(takeUntil(this.unsubscribeAll))
-        .subscribe((status: GameStates | undefined) => {
-          if (status === GameStates.Running) {
+        .subscribe((status: GameState | undefined) => {
+          if (status === GameState.Running) {
             this.gameService.emojiFace = Resources.GrinningFace;
             this.startTimer();
-          } else if (status === GameStates.Lost || status === GameStates.Won) {
+          } else if (status === GameState.Lost || status === GameState.Won) {
             this.unsubscribeTimer();
 
-            if (status === GameStates.Won) {
+            if (status === GameState.Won) {
               this.gameService.emojiFace = Resources.SmilingFaceWithSunglasses;
               this.gameService.flagsAvailable = 0;
             }
 
-            if (status === GameStates.Lost) {
+            if (status === GameState.Lost) {
               this.gameService.emojiFace = Resources.NauseatedFace;
             }
           }
@@ -113,7 +90,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             filter(length => length === 0)
         )
-        .subscribe(() => this.gameService.setGameStatus(GameStates.Won));
+        .subscribe(() => this.gameService.setGameStatus(GameState.Won));
   }
 
   ngOnDestroy(): void {
@@ -125,7 +102,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
   }
 
   createNewEmptyBoard(): void {
-    this.gameService.newEmptyBoard(this.width, this.height, this.numMines);
+    this.gameService.newEmptyBoard();
     this.unsubscribeTimer();
     this.timer = 0;
   }
@@ -144,8 +121,26 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChangeGameLevel(levelSelected: Difficulty): void {
-    this.difficulty$.next(levelSelected);
+  onChangeGameLevel(difficultySelected: Difficulty): void {
+    switch (difficultySelected) {
+      case Difficulty.Easy:
+        this.gameService.width = 9;
+        this.gameService.height = 9;
+        this.gameService.numMines = 10;
+        break;
+      case Difficulty.Medium:
+        this.gameService.width = 16;
+        this.gameService.height = 16;
+        this.gameService.numMines = 40;
+        break;
+      case Difficulty.Hard:
+        this.gameService.width = 30;
+        this.gameService.height = 16;
+        this.gameService.numMines = 99;
+    }
+
+    this.gameService.difficulty = difficultySelected;
+    this.createNewEmptyBoard();
   }
 
   onContextMenu(event: Event) {
@@ -172,7 +167,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
           type: board[y][x],
           y,
           x,
-          i: (y * this.height) + x,
+          i: (y * this.gameService.height) + x,
           label: '',
           isOpened: false,
           isMine: false,
@@ -202,12 +197,12 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
 
     if (cellData.type === CellContent.Mine) {
       cellData.isMineExploded = true;
-      this.gameService.setGameStatus(GameStates.Lost);
+      this.gameService.setGameStatus(GameState.Lost);
 
       return;
     }
 
-    this.gameService.setGameStatus(GameStates.Running);
+    this.gameService.setGameStatus(GameState.Running);
 
     cellData.isOpened = true;
 
@@ -222,11 +217,11 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
   }
 
   private updateRemainingEmptyCells(): void {
-    const minesweeper = this.gameService;
     const allOpenedCells = this.findAllCellDataByKeyValue('isOpened', true);
-    const remainEmptyCells = minesweeper.height * minesweeper.width - (minesweeper.numMines + allOpenedCells.length);
+    const numCells = this.gameService.height * this.gameService.width;
+    const remainEmptyCells = numCells - (this.gameService.numMines + allOpenedCells.length);
 
-    minesweeper.setRemainEmptyCells(remainEmptyCells);
+    this.gameService.setRemainEmptyCells(remainEmptyCells);
   }
 
   private openCellsAroundZero(clickedCell: CellModel): void {
@@ -257,7 +252,6 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
       }
 
       clickedCell = this.findCellDataByKeyValue('openedIdClassName', 'opened-0');
-
       if (clickedCell) {
         clickedCell.isCenterZero = true;
       }
@@ -323,7 +317,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     }
 
     if (willLost) {
-      this.gameService.setGameStatus(GameStates.Lost);
+      this.gameService.setGameStatus(GameState.Lost);
     }
   }
 

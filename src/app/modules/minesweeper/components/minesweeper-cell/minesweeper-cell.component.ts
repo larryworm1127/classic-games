@@ -3,7 +3,7 @@ import { Subscription } from "rxjs";
 import { CellModel } from "@modules/minesweeper/interfaces/cell-model";
 import { MinesweeperService } from "@modules/minesweeper/services/minesweeper.service";
 import { CellContent } from "@modules/minesweeper/enums/cell-content";
-import { GameStates } from "@modules/minesweeper/enums/game-states";
+import { GameState } from "@modules/minesweeper/enums/game-state";
 import { filter } from "rxjs/operators";
 import { Resources } from "@modules/minesweeper/enums/resources";
 
@@ -21,14 +21,14 @@ export class MinesweeperCellComponent implements OnChanges {
   @Input() cell: CellModel | any;
   @Output() open = new EventEmitter<number[]>();
 
-  private gameStatus$: Subscription | undefined;
+  private gameStatusSub: Subscription | undefined;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.gameStatus$) {
-      this.gameStatus$.unsubscribe();
+    if (this.gameStatusSub) {
+      this.gameStatusSub.unsubscribe();
     }
     if (changes && changes.cell && !changes.cell.isFirstChange() && this.cell.type === CellContent.Mine) {
-      this.gameStatusSubscription();
+      this.subscribeGameState();
     }
   }
 
@@ -58,14 +58,14 @@ export class MinesweeperCellComponent implements OnChanges {
     if (this.cell.label === CellContent.Flag) {
       this.cell.label = '';
       this.gameService.flagsAvailable += 1;
-      if (this.cell.type !== CellContent.Mine && this.gameStatus$) {
-        this.gameStatus$.unsubscribe();
+      if (this.cell.type !== CellContent.Mine && this.gameStatusSub) {
+        this.gameStatusSub.unsubscribe();
       }
     } else if (this.gameService.flagsAvailable > 0) {
       this.cell.label = CellContent.Flag;
       this.gameService.flagsAvailable -= 1;
       if (this.cell.type !== CellContent.Mine) {
-        this.gameStatusSubscription();
+        this.subscribeGameState();
       }
     }
 
@@ -73,17 +73,17 @@ export class MinesweeperCellComponent implements OnChanges {
   }
 
   private isUnavailableToFlag(): boolean {
-    return this.gameService.gameStateValue === GameStates.Won
-        || this.gameService.gameStateValue === GameStates.Lost
+    return this.gameService.gameStateValue === GameState.Won
+        || this.gameService.gameStateValue === GameState.Lost
         || this.gameService.isFirstCellClick
         || this.cell.isOpened;
   }
 
-  private gameStatusSubscription(): void {
-    this.gameStatus$ = this.gameService.gameState$
-        .pipe(filter(status => status === GameStates.Lost || status === GameStates.Won))
-        .subscribe((status: GameStates) => {
-          if (status === GameStates.Lost) {
+  private subscribeGameState(): void {
+    this.gameStatusSub = this.gameService.gameState$
+        .pipe(filter(status => status === GameState.Lost || status === GameState.Won))
+        .subscribe((status: GameState) => {
+          if (status === GameState.Lost) {
             if (this.cell.label === CellContent.Flag) {
               if (this.cell.type !== CellContent.Mine) {
                 this.cell.isWrongFlag = true;
@@ -97,15 +97,15 @@ export class MinesweeperCellComponent implements OnChanges {
             this.cell.label = CellContent.Flag;
           }
 
-          if (this.gameStatus$) {
-            this.gameStatus$.unsubscribe();
+          if (this.gameStatusSub) {
+            this.gameStatusSub.unsubscribe();
           }
         });
   }
 
   private isUnavailableToOpen(): boolean {
     return this.cell.label === CellContent.Flag ||
-        this.gameService.gameStateValue === GameStates.Lost ||
-        this.gameService.gameStateValue === GameStates.Won;
+        this.gameService.gameStateValue === GameState.Lost ||
+        this.gameService.gameStateValue === GameState.Won;
   }
 }

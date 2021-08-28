@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AROUND_CELL_OPERATORS } from "@modules/minesweeper/constants";
 import { Resources } from "@modules/minesweeper/enums/resources";
-import { GameStates } from "@modules/minesweeper/enums/game-states";
+import { GameState } from "@modules/minesweeper/enums/game-state";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { BoardData } from "@modules/minesweeper/interfaces/board-data";
 import { CellContent } from "@modules/minesweeper/enums/cell-content";
+import { Difficulty } from "@modules/minesweeper/enums/difficulty";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,9 @@ import { CellContent } from "@modules/minesweeper/enums/cell-content";
 export class MinesweeperService {
 
   constructor() {
+    this.width = 9;
+    this.height = 9;
+    this.numMines = 10;
   }
 
   get boardHasChanded$(): Observable<BoardData> {
@@ -22,11 +26,11 @@ export class MinesweeperService {
     return this.remainingEmptyCells.asObservable();
   }
 
-  get gameState$(): Observable<GameStates> {
+  get gameState$(): Observable<GameState> {
     return this.gameStatus.asObservable();
   }
 
-  get gameStateValue(): GameStates {
+  get gameStateValue(): GameState {
     return this.gameStatus.value;
   }
 
@@ -41,6 +45,7 @@ export class MinesweeperService {
   height: number = 9;
   width: number = 9;
   numMines: number = 10;
+  difficulty: Difficulty = Difficulty.Easy;
 
   private board: number[][] | any[][] = [];
   private boardData$ = new Subject<BoardData>();
@@ -48,7 +53,7 @@ export class MinesweeperService {
   private isFirstBoard = true;
   private remainingEmptyCells: BehaviorSubject<number> = new BehaviorSubject(this.height * this.width - this.numMines);
   flagsAvailable: number = this.numMines;
-  private gameStatus = new BehaviorSubject(GameStates.NotStarted);
+  private gameStatus = new BehaviorSubject(GameState.NotStarted);
   emojiFace: Resources = Resources.GrinningFace;
   isFirstCellClick: boolean = true;
   private _firstCellIsReadyToOpen = new Subject<boolean>();
@@ -62,12 +67,12 @@ export class MinesweeperService {
     return randomCell[0] !== firstCellOpened[0] || randomCell[1] !== firstCellOpened[1];
   }
 
-  newEmptyBoard(vertical: number, horizontal: number, minesLength: number): void {
+  newEmptyBoard(): void {
     this.board = [];
-    this.height = vertical;
-    this.width = horizontal;
-    this.numMines = minesLength;
-    this.flagsAvailable = minesLength;
+    // this.height = vertical;
+    // this.width = horizontal;
+    // this.numMines = minesLength;
+    this.flagsAvailable = this.numMines;
     this.emojiFace = Resources.GrinningFace;
     this.isFirstCellClick = true;
 
@@ -76,7 +81,7 @@ export class MinesweeperService {
       this.isFirstBoard = false;
     } else {
       this.remainingEmptyCells.next(this.height * this.width - this.numMines);
-      this.gameStatus.next(GameStates.NotStarted);
+      this.gameStatus.next(GameState.NotStarted);
     }
 
     this.generateEmptyBoard();
@@ -98,7 +103,7 @@ export class MinesweeperService {
     this.remainingEmptyCells.next(value);
   }
 
-  setGameStatus(status: GameStates) {
+  setGameStatus(status: GameState) {
     this.gameStatus.next(status);
   }
 
