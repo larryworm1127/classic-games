@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MinesweeperComponent } from './minesweeper.component';
+import { MinesweeperBoardComponent } from './minesweeper-board.component';
 
-describe('MinesweeperComponent', () => {
-  let component: MinesweeperComponent;
-  let fixture: ComponentFixture<MinesweeperComponent>;
+describe('MinesweeperBoardComponent', () => {
+  let component: MinesweeperBoardComponent;
+  let fixture: ComponentFixture<MinesweeperBoardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MinesweeperComponent ]
+      declarations: [ MinesweeperBoardComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MinesweeperComponent);
+    fixture = TestBed.createComponent(MinesweeperBoardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
