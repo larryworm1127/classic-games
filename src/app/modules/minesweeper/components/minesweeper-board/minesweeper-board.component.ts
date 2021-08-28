@@ -32,8 +32,8 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
   }
 
   boardParsed: CellModel[][] = [];
-  gameLevel: Difficulty = Difficulty.Easy;
-  gameStatus: string | undefined;
+  difficulty: Difficulty = Difficulty.Easy;
+  gameState: GameStates | undefined;
   timer = 0;
   height: number = 9;
   width: number = 9;
@@ -81,7 +81,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
               this.numMines = 99;
           }
 
-          this.gameLevel = difficultySelected;
+          this.difficulty = difficultySelected;
           this.createNewEmptyBoard();
         });
 
@@ -104,7 +104,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
             }
           }
 
-          this.gameStatus = status;
+          this.gameState = status;
         });
 
     this.gameService.remainingEmptyCells$

@@ -1,3 +1,10 @@
+@import "src/scss/variables";
+@import "src/scss/util";
+
+$light-accent: tint($accent, 50%);
+$light-primary: tint($primary, 10%);
+$text-primary: tint($primary, 60%);
+
 .app__content {
   width: 100%;
   padding: 0 8px;
@@ -22,4 +29,138 @@
   &--hard {
     max-width: 940px;
   }
+}
+
+.board {
+  padding: $board-space;
+  background-color: $grey;
+  border-radius: $border-radius;
+  @include border-bevel($grey);
+}
+
+.board__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $board-space;
+  border-radius: 4px;
+  margin-bottom: $board-space;
+  @include border-emboss($primary);
+  background-color: $primary;
+}
+
+.board__main {
+  font-weight: bold;
+  font-size: 18px;
+  overflow: auto;
+  border-radius: 4px;
+  @include border-emboss($grey);
+  background-color: shade($grey, 2%);
+}
+
+.board__face {
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+}
+
+.board__face-img {
+  width: 36px;
+  cursor: pointer;
+  display: block;
+}
+
+.board__footer {
+  padding-top: $board-space;
+}
+
+.board__level-control,
+.board__dynamic-infos {
+  width: 94px;
+
+  @include mq($gt-xs) {
+    width: 152px;
+  }
+}
+
+.board__level-control {
+  font-size: 16px;
+  height: 40px;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+  border: 0;
+  padding: 5px;
+  color: white;
+  background-color: $light-primary;
+
+  @include mq($gt-xs) {
+    padding: $board-space;
+  }
+}
+
+.board__dynamic-infos {
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+  padding: 5px 0 0 $board-space;
+  background-color: $light-primary;
+  border-radius: 2px;
+
+  @include mq($gt-xs) {
+    padding: $board-space 0 $board-space $board-space;
+    flex-direction: row;
+  }
+}
+
+.board__dynamic-info {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+
+  @include mq($gt-xs) {
+    margin-right: $board-space;
+    margin-bottom: 0;
+  }
+}
+
+.board__dynamic-info-img {
+  width: 18px;
+  position: relative;
+
+  @include mq($gt-xs) {
+    width: 24px;
+    margin-bottom: 0;
+  }
+}
+
+.board__flag-img {
+  left: 2px;
+
+  @include mq($gt-xs) {
+    left: initial;
+  }
+}
+
+.board--stopwatch-img {
+  bottom: 1px;
+}
+
+.board__dynamic-info-text {
+  width: 32px;
+  margin-left: $board-space;
+  position: relative;
+  top: 1px;
+}
+
+.minesweeper-row {
+  display: flex;
+}
+
+.board__new-game-button {
+  width: 100% !important;
+  text-transform: uppercase;
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  color: $primary;
 }

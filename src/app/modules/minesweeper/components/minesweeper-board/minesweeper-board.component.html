@@ -1,12 +1,8 @@
-<div class="app__content" [ngClass]="'app--' + gameLevel">
-  <header>
-    <h1>Minesweeper</h1>
-  </header>
-
+<div class="app__content" [ngClass]="'app--' + difficulty">
   <div class="board">
     <header class="board__header">
       <form>
-        <select class="board__level-control" name="gameLevel" [ngModel]="gameLevel"
+        <select class="board__level-control" name="gameLevel" [ngModel]="difficulty"
                 (ngModelChange)="onChangeGameLevel($event)">
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
@@ -34,8 +30,8 @@
       </div>
     </header>
 
-    <main class="board__main" [ngClass]="[gameStatus ? gameStatus : '']">
-      <div class="board__inner" (contextmenu)="onContextMenu($event)" #boardInner>
+    <main class="board__main" [ngClass]="[gameState ? gameState : '']">
+      <div class="board__inner" (contextmenu)="onContextMenu($event)">
         <section *ngFor="let row of boardParsed; trackBy: trackByRow" class="minesweeper-row">
           <app-minesweeper-cell *ngFor="let cell of row; trackBy: trackByCell"
                                 [cell]="cell"
