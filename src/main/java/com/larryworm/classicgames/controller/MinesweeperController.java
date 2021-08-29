@@ -13,7 +13,7 @@ import java.util.List;
 @CrossOrigin()
 public class MinesweeperController {
 
-    @GetMapping("/minesweeper/")
+    @GetMapping("/minesweeper/board")
     List<Integer> getNewBoard(@RequestParam int width, @RequestParam int height, @RequestParam int numMines,
                               @RequestParam List<Integer> firstMove) {
         return Minesweeper.generateBoard(width, height, numMines, Pair.fromCollection(firstMove));

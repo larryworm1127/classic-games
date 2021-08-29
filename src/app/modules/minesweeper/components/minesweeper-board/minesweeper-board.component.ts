@@ -6,7 +6,6 @@ import { Difficulty } from "@modules/minesweeper/enums/difficulty";
 import { delay, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
 import { Subject, Subscription, timer } from "rxjs";
 import { MinesweeperService } from "@modules/minesweeper/services/minesweeper.service";
-import { AROUND_CELL_OPERATORS } from "@modules/minesweeper/constants";
 import { BoardData } from "@modules/minesweeper/interfaces/board-data";
 import { CellContent } from "@modules/minesweeper/enums/cell-content";
 
@@ -19,8 +18,14 @@ import { CellContent } from "@modules/minesweeper/enums/cell-content";
 })
 export class MinesweeperBoardComponent implements OnInit, OnDestroy {
 
-  constructor(protected gameService: MinesweeperService) {
-    this.unsubscribeAll = new Subject();
+  boardParsed: CellModel[][] = [];
+  gameState: GameState | undefined;
+  timer = 0;
+
+  private timerSub: Subscription | null | undefined;
+  private unsubscribeAll: Subject<any> = new Subject();
+
+  constructor(private gameService: MinesweeperService) {
   }
 
   get flagsAvailable(): number {
@@ -35,20 +40,17 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     return this.gameService.difficulty;
   }
 
-  boardParsed: CellModel[][] = [];
-  gameState: GameState | undefined;
-  timer = 0;
-
-  // @ts-ignore
-  private timerSub: Subscription | null;
-  private unsubscribeAll: Subject<any>;
-
-  private static getNeighborCells(index: number, centerCellCoord: number[]): number[] {
-    const aroundGetter = AROUND_CELL_OPERATORS[index];
-    const cellAroundY = centerCellCoord[0] + aroundGetter[0];
-    const cellAroundX = centerCellCoord[1] + aroundGetter[1];
-
-    return [cellAroundY, cellAroundX];
+  private static getNeighborCells(cellCoord: number[]): number[][] {
+    return [
+      [cellCoord[0] - 1, cellCoord[1] - 1],
+      [cellCoord[0] - 1, cellCoord[1]],
+      [cellCoord[0] - 1, cellCoord[1] + 1],
+      [cellCoord[0], cellCoord[1] - 1],
+      [cellCoord[0], cellCoord[1] + 1],
+      [cellCoord[0] + 1, cellCoord[1] - 1],
+      [cellCoord[0] + 1, cellCoord[1]],
+      [cellCoord[0] + 1, cellCoord[1] + 1],
+    ]
   }
 
   ngOnInit(): void {
@@ -88,7 +90,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
         .pipe(
             takeUntil(this.unsubscribeAll),
             distinctUntilChanged(),
-            filter(length => length === 0)
+            filter(num => num === 0)
         )
         .subscribe(() => this.gameService.setGameStatus(GameState.Won));
   }
@@ -114,42 +116,23 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
           .subscribe(() => this.openCell(clickedCellCoord));
       this.gameService.isFirstCellClick = false;
       this.gameService.populateEmptyBoard(clickedCellCoord);
-    } else if (this.isCellOpened(clickedCellCoord)) {
+    } else if (this.boardParsed[clickedCellCoord[0]][clickedCellCoord[1]].isOpened) {
       this.manageCellsAround(clickedCellCoord);
     } else {
       this.openCell(clickedCellCoord);
     }
   }
 
-  onChangeGameLevel(difficultySelected: Difficulty): void {
-    switch (difficultySelected) {
-      case Difficulty.Easy:
-        this.gameService.width = 9;
-        this.gameService.height = 9;
-        this.gameService.numMines = 10;
-        break;
-      case Difficulty.Medium:
-        this.gameService.width = 16;
-        this.gameService.height = 16;
-        this.gameService.numMines = 40;
-        break;
-      case Difficulty.Hard:
-        this.gameService.width = 30;
-        this.gameService.height = 16;
-        this.gameService.numMines = 99;
-    }
-
-    this.gameService.difficulty = difficultySelected;
+  onDifficultyChange(difficultySelected: Difficulty): void {
+    this.gameService.setNewDifficulty(difficultySelected);
     this.createNewEmptyBoard();
   }
 
-  onContextMenu(event: Event) {
+  onContextMenu(event: Event): void {
     event.preventDefault();
-
-    return false;
   }
 
-  trackByRow(index: number, element: CellModel[]): number {
+  trackByRow(index: number): number {
     return index;
   }
 
@@ -167,7 +150,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
           type: board[y][x],
           y,
           x,
-          i: (y * this.gameService.height) + x,
+          i: (y * board.length) + x,
           label: '',
           isOpened: false,
           isMine: false,
@@ -192,8 +175,8 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private openCell(clickedCellCoord: number[]): void {
-    const cellData = this.getCellDataByCoord(clickedCellCoord);
+  private openCell(coordinate: number[]): void {
+    const cellData = this.boardParsed[coordinate[0]][coordinate[1]];
 
     if (cellData.type === CellContent.Mine) {
       cellData.isMineExploded = true;
@@ -207,20 +190,12 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
 
     if (cellData.type === 0) {
       this.openCellsAroundZero(cellData);
-      this.updateRemainingEmptyCells();
+      this.gameService.updateRemainingEmptyCells(this.getNumOpenCells());
     } else {
       cellData.label = cellData.type.toString();
       cellData.openedIdClassName = `opened-${cellData.type}`;
       this.gameService.decreaseRemainingEmptyCells(1);
     }
-  }
-
-  private updateRemainingEmptyCells(): void {
-    const allOpenedCells = this.findAllCellDataByKeyValue('isOpened', true);
-    const numCells = this.gameService.height * this.gameService.width;
-    const remainEmptyCells = numCells - (this.gameService.numMines + allOpenedCells.length);
-
-    this.gameService.setRemainEmptyCells(remainEmptyCells);
   }
 
   private openCellsAroundZero(clickedCell: CellModel): void {
@@ -229,11 +204,9 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     while (clickedCell) {
       clickedCell.openedIdClassName = '';
 
-      for (let i = 0; i < AROUND_CELL_OPERATORS.length; i++) {
-        const cellAroundCoords = MinesweeperBoardComponent.getNeighborCells(i, [clickedCell.y, clickedCell.x]);
-
-        if (this.isThereCellAround(cellAroundCoords)) {
-          const cellAroundData = this.getCellDataByCoord(cellAroundCoords);
+      for (let neighborCell of MinesweeperBoardComponent.getNeighborCells([clickedCell.y, clickedCell.x])) {
+        if (this.gameService.isInBound(neighborCell)) {
+          const cellAroundData = this.boardParsed[neighborCell[0]][neighborCell[1]];
 
           if (cellAroundData.label !== CellContent.Flag) {
             if (cellAroundData.type === 0) {
@@ -257,12 +230,8 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private isCellOpened(cellCoord: number[]) {
-    return this.getCellDataByCoord(cellCoord).isOpened;
-  }
-
   private manageCellsAround(clickedCellCoord: number[]): void {
-    const cellData = this.getCellDataByCoord(clickedCellCoord);
+    const cellData = this.boardParsed[clickedCellCoord[0]][clickedCellCoord[1]];
     const cellType = (cellData.type as number);
 
     if (!isNaN(cellType) && cellType !== 0) {
@@ -277,11 +246,9 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
   private getFlagsAroundLength(clickedCellCoord: number[]): number {
     let flagsAroundLength = 0;
 
-    for (let i = 0; i < AROUND_CELL_OPERATORS.length; i++) {
-      const cellAroundCoords = MinesweeperBoardComponent.getNeighborCells(i, clickedCellCoord);
-
-      if (this.isThereCellAround(cellAroundCoords)) {
-        const cellAroundData = this.getCellDataByCoord(cellAroundCoords);
+    for (let neighborCell of MinesweeperBoardComponent.getNeighborCells(clickedCellCoord)) {
+      if (this.gameService.isInBound(neighborCell)) {
+        const cellAroundData = this.boardParsed[neighborCell[0]][neighborCell[1]];
 
         if (cellAroundData.label === CellContent.Flag) {
           flagsAroundLength++;
@@ -295,34 +262,26 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
   private openCellsAround(clickedCellCoord: number[]) {
     let willLost = false;
 
-    for (let i = 0; i < AROUND_CELL_OPERATORS.length; i++) {
-      const cellAroundCoords = MinesweeperBoardComponent.getNeighborCells(i, clickedCellCoord);
+    for (let neighborCell of MinesweeperBoardComponent.getNeighborCells(clickedCellCoord)) {
+      if (this.gameService.isInBound(neighborCell)) {
+        const neighborData = this.boardParsed[neighborCell[0]][neighborCell[1]];
 
-      if (this.isThereCellAround(cellAroundCoords)) {
-        const cellAroundData = this.getCellDataByCoord(cellAroundCoords);
-
-        if (cellAroundData.label === CellContent.Flag || cellAroundData.isOpened) {
+        if (neighborData.label === CellContent.Flag || neighborData.isOpened) {
           continue;
         }
 
-        if (cellAroundData.type === CellContent.Mine && !willLost) {
+        if (neighborData.type === CellContent.Mine && !willLost) {
           willLost = true;
-
           continue;
         }
 
-        this.openCell(cellAroundCoords);
+        this.openCell(neighborCell);
       }
     }
 
     if (willLost) {
       this.gameService.setGameStatus(GameState.Lost);
     }
-  }
-
-  private isThereCellAround(cellAroundCoords: number[]): boolean {
-    return cellAroundCoords[0] >= 0 && cellAroundCoords[0] < this.gameService.height &&
-        cellAroundCoords[1] >= 0 && cellAroundCoords[1] < this.gameService.width;
   }
 
   private findCellDataByKeyValue(key: string, value: any): CellModel | any {
@@ -337,22 +296,11 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     return undefined;
   }
 
-  private findAllCellDataByKeyValue(key: string, value: any): CellModel[] {
-    const finalArr = [];
-    for (const row of this.boardParsed) {
-      // @ts-ignore
-      const filteredRow = row.filter(cell => cell[key] === value);
-      if (filteredRow.length) {
-        for (const item of filteredRow) {
-          finalArr.push(item);
-        }
-      }
+  private getNumOpenCells(): number {
+    let numOpenedCells = 0;
+    for (let row of this.boardParsed) {
+      numOpenedCells += row.filter(cell => cell.isOpened).length;
     }
-
-    return finalArr;
-  }
-
-  private getCellDataByCoord(cellCoord: number[]): CellModel {
-    return this.boardParsed[cellCoord[0]][cellCoord[1]];
+    return numOpenedCells;
   }
 }

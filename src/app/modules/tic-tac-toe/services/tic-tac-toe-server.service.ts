@@ -9,11 +9,9 @@ import { Observable } from "rxjs";
 })
 export class TicTacToeServerService {
 
-  private readonly ticTacToeUrl: string;
+  private readonly ticTacToeUrl: string = 'ttt';
 
-  constructor(private http: HttpClient) {
-    this.ticTacToeUrl = 'ttt';
-  }
+  constructor(private http: HttpClient) { }
 
   public getNextMove(board: Square[], player: Players): Observable<any> {
     let boardCleaned = board.map(square => TicTacToeServerService.getState(square.state));

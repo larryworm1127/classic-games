@@ -62,7 +62,7 @@ public class Minesweeper {
     }
 
     private static boolean isInBound(int row, int column, int width, int height) {
-        return 0 <= row && row <= height - 1 && 0 <= column && column < width - 1;
+        return 0 <= row && row < height && 0 <= column && column < width;
     }
 
     private static List<Pair<Integer, Integer>> getNeighbors(int row, int column) {

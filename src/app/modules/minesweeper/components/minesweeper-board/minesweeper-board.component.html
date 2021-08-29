@@ -3,7 +3,7 @@
     <header class="board__header">
       <form>
         <select class="board__level-control" name="gameLevel" [ngModel]="difficulty"
-                (ngModelChange)="onChangeGameLevel($event)">
+                (ngModelChange)="onDifficultyChange($event)">
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
           <option value="hard">Hard</option>

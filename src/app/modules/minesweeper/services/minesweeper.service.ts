@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { AROUND_CELL_OPERATORS } from "@modules/minesweeper/constants";
 import { Resources } from "@modules/minesweeper/enums/resources";
 import { GameState } from "@modules/minesweeper/enums/game-state";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { BoardData } from "@modules/minesweeper/interfaces/board-data";
 import { CellContent } from "@modules/minesweeper/enums/cell-content";
 import { Difficulty } from "@modules/minesweeper/enums/difficulty";
+import { MinesweeperServerService } from "@modules/minesweeper/services/minesweeper-server.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MinesweeperService {
 
-  height: number = 9;
-  width: number = 9;
-  numMines: number = 10;
+  private height: number = 9;
+  private width: number = 9;
+  private numMines: number = 10;
   difficulty: Difficulty = Difficulty.Easy;
   flagsAvailable: number = this.numMines;
   emojiFace: Resources = Resources.GrinningFace;
@@ -23,11 +23,11 @@ export class MinesweeperService {
 
   private board: number[][] | any[][] = [];
   private boardData$ = new Subject<BoardData>();
-  private minesPositions: number[][] = [];
   private remainingEmptyCells: BehaviorSubject<number> = new BehaviorSubject(this.height * this.width - this.numMines);
   private gameStatus = new BehaviorSubject(GameState.NotStarted);
 
-  constructor() { }
+  constructor(private serverService: MinesweeperServerService) {
+  }
 
   get boardHasChanded$(): Observable<BoardData> {
     return this.boardData$.asObservable();
@@ -49,13 +49,14 @@ export class MinesweeperService {
     return this.firstCellIsReadyToOpen.asObservable();
   }
 
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-  private static getRandomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min)) + min;
+  isInBound(cellCoord: number[]): boolean {
+    return cellCoord[0] >= 0 && cellCoord[0] < this.height && cellCoord[1] >= 0 && cellCoord[1] < this.width;
   }
 
-  private static isDifferentFromFirstCellOpened(randomCell: number[], firstCellOpened: number[]): boolean {
-    return randomCell[0] !== firstCellOpened[0] || randomCell[1] !== firstCellOpened[1];
+  updateRemainingEmptyCells(numOpenCells: number): void {
+    const numCells = this.height * this.width;
+    const remainEmptyCells = numCells - (this.numMines + numOpenCells);
+    this.remainingEmptyCells.next(remainEmptyCells);
   }
 
   newEmptyBoard(): void {
@@ -66,76 +67,61 @@ export class MinesweeperService {
     this.remainingEmptyCells.next(this.height * this.width - this.numMines);
     this.gameStatus.next(GameState.NotStarted);
 
-    this.generateEmptyBoard();
-    this.boardData$.next({ board: [...this.board], isBoardReset: true });
-  }
-
-  populateEmptyBoard(firstCellOpened: number[]): void {
-    this.generateMinesPositions(this.numMines, firstCellOpened);
-    this.insertMines();
-    this.updateBoardNumbers();
-    this.boardData$.next({ board: [...this.board], isBoardReset: false });
-  }
-
-  decreaseRemainingEmptyCells(value: number): void {
-    this.remainingEmptyCells.next(this.remainingEmptyCells.value - value);
-  }
-
-  setRemainEmptyCells(value: number) {
-    this.remainingEmptyCells.next(value);
-  }
-
-  setGameStatus(status: GameState) {
-    this.gameStatus.next(status);
-  }
-
-  private generateEmptyBoard(): void {
+    // Clear the board
     for (let y = 0; y < this.height; y++) {
       this.board.push([]);
       for (let x = 0; x < this.width; x++) {
         this.board[y][x] = 0;
       }
     }
+    this.boardData$.next({ board: [...this.board], isBoardReset: true });
   }
 
-  private insertMines(): void {
-    for (const item of this.minesPositions) {
-      const y = item[0];
-      const x = item[1];
-      this.board[y][x] = CellContent.Mine;
-    }
+  populateEmptyBoard(firstCellOpened: number[]): void {
+    this.serverService.getBoard(this.width, this.height, this.numMines, firstCellOpened)
+        .subscribe(data => {
+          this.parseBoard(data);
+          this.boardData$.next({ board: [...this.board], isBoardReset: false });
+        });
   }
 
-  private generateMinesPositions(numMines: number, firstCellOpened: number[]): void {
-    this.minesPositions = [];
-    while (this.minesPositions.length < numMines) {
-      const y = MinesweeperService.getRandomInt(0, this.height);
-      const x = MinesweeperService.getRandomInt(0, this.width);
-
-      if (!this.isAlreadyAMine([y, x]) && MinesweeperService.isDifferentFromFirstCellOpened([y, x], firstCellOpened)) {
-        this.minesPositions.push([y, x]);
+  private parseBoard(givenBoard: number[]): void {
+    for (let i = 0; i < givenBoard.length; i++) {
+      const row = Math.floor(i / this.width);
+      const col = i % this.width;
+      if (givenBoard[i] === 9) {
+        this.board[row][col] = CellContent.Mine;
+      } else {
+        this.board[row][col] = givenBoard[i];
       }
     }
   }
 
-  private isAlreadyAMine(minePosition: number[]): boolean {
-    return this.minesPositions.join(' ').includes(minePosition.toString());
+  decreaseRemainingEmptyCells(value: number): void {
+    this.remainingEmptyCells.next(this.remainingEmptyCells.value - value);
   }
 
-  private updateBoardNumbers(): void {
-    for (const item of this.minesPositions) {
-      for (const item1 of AROUND_CELL_OPERATORS) {
-        const minePosition = item;
-        const around = item1;
-        const boardY = minePosition[0] + around[0];
-        const boardX = minePosition[1] + around[1];
+  setGameStatus(status: GameState): void {
+    this.gameStatus.next(status);
+  }
 
-        if (boardY >= 0 && boardY < this.height &&
-            boardX >= 0 && boardX < this.width &&
-            typeof this.board[boardY][boardX] === 'number') {
-          this.board[boardY][boardX]++;
-        }
-      }
+  setNewDifficulty(difficulty: Difficulty): void {
+    this.difficulty = difficulty;
+    switch (difficulty) {
+      case Difficulty.Easy:
+        this.width = 9;
+        this.height = 9;
+        this.numMines = 10;
+        break;
+      case Difficulty.Medium:
+        this.width = 16;
+        this.height = 16;
+        this.numMines = 40;
+        break;
+      case Difficulty.Hard:
+        this.width = 30;
+        this.height = 16;
+        this.numMines = 99;
     }
   }
 }
