@@ -23,8 +23,6 @@ class SudokuTest {
             0, 2, 0, 0, 8, 0, 1, 0, 0
         );
         var result = Sudoku.solveSudoku(board);
-        assertTrue(result.isPresent());
-
         var expected = List.of(
             3, 1, 2, 5, 9, 8, 7, 6, 4,
             9, 4, 6, 7, 3, 1, 2, 5, 8,
@@ -36,7 +34,7 @@ class SudokuTest {
             6, 5, 4, 9, 1, 3, 8, 2, 7,
             7, 2, 9, 6, 8, 4, 1, 3, 5
         );
-        assertEquals(expected, Sudoku.assignmentsToBoard(result.get(), board));
+        assertEquals(expected, Sudoku.assignmentsToBoard(result, board));
     }
 
     @Test

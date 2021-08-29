@@ -8,7 +8,6 @@ import com.larryworm.classicgames.csp.variables.SudokuVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -51,7 +50,7 @@ public class Sudoku {
      * @param board the initial Sudoku board to be solved.
      * @return a list of assignment that solves the given Sudoku board.
      */
-    public static Optional<List<Assignment<Integer>>> solveSudoku(List<Integer> board) {
+    public static List<Assignment<Integer>> solveSudoku(List<Integer> board) {
         // Format board into 2d list
         List<List<Integer>> board2d = new ArrayList<>();
         int index = 0;
@@ -68,9 +67,7 @@ public class Sudoku {
         var csp = Sudoku.getInstance(board2d);
         var undoMap = SudokuVariable.getNewUndoMap();
         var solutions = Algorithms.backtrackSearch(csp, false, false, undoMap);
-        return (solutions.isEmpty() || !csp.checkSolution(solutions)) ?
-            Optional.empty() :
-            Optional.of(solutions.get(0));
+        return (solutions.isEmpty() || !csp.checkSolution(solutions)) ? new ArrayList<>() : solutions.get(0);
     }
 
     /**

@@ -65,7 +65,7 @@ export class SudokuService {
     }
 
     this.serverService.getHints(this.boardContent).subscribe(hints => {
-      if (hints === null) {
+      if (hints.length === 0) {
         this.message = "Board has error or is unsolvable!";
       } else {
         let randomHint = hints[Math.floor(Math.random() * hints.length)];
