@@ -24,12 +24,12 @@ export class MinesweeperService {
   private board: number[][] | any[][] = [];
   private boardData$ = new Subject<BoardData>();
   private remainingEmptyCells: BehaviorSubject<number> = new BehaviorSubject(this.height * this.width - this.numMines);
-  private gameStatus = new BehaviorSubject(GameState.NotStarted);
+  private gameState = new BehaviorSubject(GameState.NotStarted);
 
   constructor(private serverService: MinesweeperServerService) {
   }
 
-  get boardHasChanded$(): Observable<BoardData> {
+  get boardHasChanged$(): Observable<BoardData> {
     return this.boardData$.asObservable();
   }
 
@@ -38,11 +38,11 @@ export class MinesweeperService {
   }
 
   get gameState$(): Observable<GameState> {
-    return this.gameStatus.asObservable();
+    return this.gameState.asObservable();
   }
 
   get gameStateValue(): GameState {
-    return this.gameStatus.value;
+    return this.gameState.value;
   }
 
   get firstCellIsReadyToOpen$(): Observable<boolean> {
@@ -65,7 +65,7 @@ export class MinesweeperService {
     this.emojiFace = Resources.GrinningFace;
     this.isFirstCellClick = true;
     this.remainingEmptyCells.next(this.height * this.width - this.numMines);
-    this.gameStatus.next(GameState.NotStarted);
+    this.gameState.next(GameState.NotStarted);
 
     // Clear the board
     for (let y = 0; y < this.height; y++) {
@@ -102,7 +102,7 @@ export class MinesweeperService {
   }
 
   setGameStatus(status: GameState): void {
-    this.gameStatus.next(status);
+    this.gameState.next(status);
   }
 
   setNewDifficulty(difficulty: Difficulty): void {

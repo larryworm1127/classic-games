@@ -1,8 +1,8 @@
-<div class="app__content" [ngClass]="'app--' + difficulty">
+<div class="minesweeper-board" [ngClass]="'minesweeper-' + difficulty">
   <div class="board">
-    <header class="board__header">
+    <header class="board-header">
       <form>
-        <select class="board__level-control" name="gameLevel" [ngModel]="difficulty"
+        <select class="board-difficulty-control" name="gameLevel" [ngModel]="difficulty"
                 (ngModelChange)="onDifficultyChange($event)">
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
@@ -10,28 +10,28 @@
         </select>
       </form>
 
-      <button class="board__face" (click)="createNewEmptyBoard()">
-        <img class="board__face-img" src="/assets/minesweeper/{{ emojiFace }}.png" alt="Face">
+      <button class="board-face" (click)="createNewEmptyBoard()">
+        <img class="board-face-img" src="/assets/minesweeper/{{ emojiFace }}.png" alt="Face">
       </button>
 
-      <div class="board__dynamic-infos">
-        <div class="board__dynamic-info">
-          <img class="board__dynamic-info-img board__flag-img"
+      <div class="board-infos">
+        <div class="board-info">
+          <img class="board-info-img board-flag-img"
                src="/assets/minesweeper/triangular-flag-on-post.png" alt="Amount of flags left">
-          <span class="board__dynamic-info-text">{{ flagsAvailable | stopWatch:'00' }}</span>
+          <span class="board-info-text">{{ flagsAvailable | stopWatch:'00' }}</span>
         </div>
 
-        <div class="board__dynamic-info">
-          <img class="board__dynamic-info-img board--stopwatch-img"
+        <div class="board-info">
+          <img class="board-info-img board-stopwatch-img"
                src="/assets/minesweeper/stopwatch.png"
                alt="Timer">
-          <span class="board__dynamic-info-text">{{ timer | stopWatch:'000'}}</span>
+          <span class="board-info-text">{{ timer | stopWatch:'000'}}</span>
         </div>
       </div>
     </header>
 
-    <main class="board__main" [ngClass]="[gameState ? gameState : '']">
-      <div class="board__inner" (contextmenu)="onContextMenu($event)">
+    <main class="board-main" [ngClass]="[gameState ? gameState : '']">
+      <div class="board-inner" (contextmenu)="onContextMenu($event)">
         <section *ngFor="let row of boardParsed; trackBy: trackByRow" class="minesweeper-row">
           <app-minesweeper-cell *ngFor="let cell of row; trackBy: trackByCell"
                                 [cell]="cell"
@@ -41,8 +41,8 @@
       </div>
     </main>
 
-    <footer class="board__footer">
-      <button type="button" class="cell board__new-game-button" (click)="createNewEmptyBoard()">
+    <footer class="board-footer">
+      <button type="button" class="cell board-new-game-button" (click)="createNewEmptyBoard()">
         New game
       </button>
     </footer>

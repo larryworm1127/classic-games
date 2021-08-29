@@ -7,18 +7,18 @@
         'opened': cell.isOpened,
         'flag': cell.label === 'F',
         'mine': cell.isMine,
-        'mine--exploded': cell.isMineExploded,
-        'flag--wrong': cell.isWrongFlag
+        'mine-exploded': cell.isMineExploded,
+        'flag-wrong': cell.isWrongFlag
     }">
 
   <ng-container [ngSwitch]="cell.label">
 
     <ng-container *ngSwitchCase="'M'">
-      <img class="cell__image" src="/assets/minesweeper/pile-of-poop.png" alt="Pile of poop">
+      <img class="cell-image" src="/assets/minesweeper/pile-of-poop.png" alt="Pile of poop">
     </ng-container>
 
     <ng-container *ngSwitchCase="'F'">
-      <img class="cell__image" src="/assets/minesweeper/triangular-flag-on-post.png" alt="Flag">
+      <img class="cell-image" src="/assets/minesweeper/triangular-flag-on-post.png" alt="Flag">
     </ng-container>
 
     <ng-container *ngSwitchDefault>

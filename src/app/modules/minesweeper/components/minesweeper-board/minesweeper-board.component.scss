@@ -5,15 +5,15 @@ $light-accent: tint($accent, 50%);
 $light-primary: tint($primary, 10%);
 $text-primary: tint($primary, 60%);
 
-.app__content {
+.minesweeper-board {
   width: 100%;
   padding: 0 8px;
   margin: 0 auto;
   transition: max-width 0.2s ease-in-out;
 }
 
-.app {
-  &--easy {
+.minesweeper {
+  &-easy {
     max-width: 436px;
 
     .cell {
@@ -22,11 +22,11 @@ $text-primary: tint($primary, 60%);
     }
   }
 
-  &--medium {
+  &-medium {
     max-width: 520px;
   }
 
-  &--hard {
+  &-hard {
     max-width: 940px;
   }
 }
@@ -38,7 +38,7 @@ $text-primary: tint($primary, 60%);
   @include border-bevel($grey);
 }
 
-.board__header {
+.board-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,7 +49,7 @@ $text-primary: tint($primary, 60%);
   background-color: $primary;
 }
 
-.board__main {
+.board-main {
   font-weight: bold;
   font-size: 18px;
   overflow: auto;
@@ -58,24 +58,24 @@ $text-primary: tint($primary, 60%);
   background-color: shade($grey, 2%);
 }
 
-.board__face {
+.board-face {
   border: 0;
   background-color: transparent;
   padding: 0;
 }
 
-.board__face-img {
+.board-face-img {
   width: 36px;
   cursor: pointer;
   display: block;
 }
 
-.board__footer {
+.board-footer {
   padding-top: $board-space;
 }
 
-.board__level-control,
-.board__dynamic-infos {
+.board-difficulty-control,
+.board-infos {
   width: 94px;
 
   @include mq($gt-xs) {
@@ -83,7 +83,7 @@ $text-primary: tint($primary, 60%);
   }
 }
 
-.board__level-control {
+.board-difficulty-control {
   font-size: 16px;
   height: 40px;
   letter-spacing: 0.05em;
@@ -98,7 +98,7 @@ $text-primary: tint($primary, 60%);
   }
 }
 
-.board__dynamic-infos {
+.board-infos {
   display: flex;
   flex-direction: column;
   color: #ffffff;
@@ -112,7 +112,7 @@ $text-primary: tint($primary, 60%);
   }
 }
 
-.board__dynamic-info {
+.board-info {
   margin-right: 5px;
   margin-bottom: 5px;
   display: flex;
@@ -124,7 +124,7 @@ $text-primary: tint($primary, 60%);
   }
 }
 
-.board__dynamic-info-img {
+.board-info-img {
   width: 18px;
   position: relative;
 
@@ -134,7 +134,7 @@ $text-primary: tint($primary, 60%);
   }
 }
 
-.board__flag-img {
+.board-flag-img {
   left: 2px;
 
   @include mq($gt-xs) {
@@ -142,11 +142,11 @@ $text-primary: tint($primary, 60%);
   }
 }
 
-.board--stopwatch-img {
+.board-stopwatch-img {
   bottom: 1px;
 }
 
-.board__dynamic-info-text {
+.board-info-text {
   width: 32px;
   margin-left: $board-space;
   position: relative;
@@ -157,7 +157,7 @@ $text-primary: tint($primary, 60%);
   display: flex;
 }
 
-.board__new-game-button {
+.board-new-game-button {
   width: 100% !important;
   text-transform: uppercase;
   font-size: 15px;

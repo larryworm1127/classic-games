@@ -54,7 +54,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.gameService.boardHasChanded$.subscribe((boardData: BoardData) => {
+    this.gameService.boardHasChanged$.subscribe((boardData: BoardData) => {
       this.parseBoard(boardData.board);
 
       if (!boardData.isBoardReset) {
@@ -187,7 +187,6 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     this.gameService.setGameStatus(GameState.Running);
 
     cellData.isOpened = true;
-
     if (cellData.type === 0) {
       this.openCellsAroundZero(cellData);
       this.gameService.updateRemainingEmptyCells(this.getNumOpenCells());
@@ -223,7 +222,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
         }
       }
 
-      clickedCell = this.findCellDataByKeyValue('openedIdClassName', 'opened-0');
+      clickedCell = this.getOpenedCellNearZero();
       if (clickedCell) {
         clickedCell.isCenterZero = true;
       }
@@ -284,15 +283,13 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private findCellDataByKeyValue(key: string, value: any): CellModel | any {
+  private getOpenedCellNearZero(): CellModel | any {
     for (const row of this.boardParsed) {
-      // @ts-ignore
-      const cellData = row.find(cell => cell[key] === value);
+      const cellData = row.find(cell => cell['openedIdClassName'] === 'opened-0');
       if (cellData) {
         return cellData;
       }
     }
-
     return undefined;
   }
 

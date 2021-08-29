@@ -27,14 +27,14 @@
   }
 }
 
-.cell__image {
+.cell-image {
   display: block;
   width: 100%;
   max-width: 100%;
 }
 
-.app--easy {
-  .cell__image {
+.minesweeper-easy {
+  .cell-image {
     width: 80%;
     max-width: 80%;
   }
@@ -55,11 +55,11 @@
   }
 }
 
-.mine--exploded {
+.mine-exploded {
   background-color: $alert;
 }
 
-.flag--wrong {
+.flag-wrong {
   position: relative;
   overflow: hidden;
 
