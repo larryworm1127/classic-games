@@ -12,5 +12,6 @@ Here is a list of features that are implemented and might be implemented in the 
 - [ ] An authentication system to show stats collected by each game/puzzle.
 - A number of simple games/puzzles for users to play:
     - [x] Tic Tac Toe
-    - [x] Sudoko
+    - [x] Sudoku
+    - [x] Minesweeper
     - [ ] Etc.
