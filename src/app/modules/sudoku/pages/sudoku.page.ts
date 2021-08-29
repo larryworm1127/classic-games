@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-sudoku',
   templateUrl: './sudoku.page.html',
-  styleUrls: ['./sudoku.page.css']
+  styleUrls: ['./sudoku.page.scss']
 })
 export class SudokuComponent implements OnInit {
 

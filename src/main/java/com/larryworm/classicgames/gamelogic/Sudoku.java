@@ -97,7 +97,7 @@ public class Sudoku {
      */
     public static List<Integer> generateBoard(Difficulty difficulty) {
         // Initialize new board array
-        final Integer[][] board = new Integer[DIM][DIM];
+        final int[][] board = new int[DIM][DIM];
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
                 board[i][j] = 0;
@@ -118,7 +118,7 @@ public class Sudoku {
     }
 
     private static CSP<Integer> getInstance(List<List<Integer>> initialBoard) {
-        /* Define variables for SudokuCSP */
+        /* Define variables for Sudoku CSP */
         var variables = new ArrayList<List<SudokuVariable>>();
         for (int i = 0; i < Sudoku.DIM; i++) {
             var row = new ArrayList<SudokuVariable>();
@@ -146,7 +146,11 @@ public class Sudoku {
         for (int i : List.of(0, 3, 6)) {
             for (int j : List.of(0, 3, 6)) {
                 var scope = new ArrayList<Variable<Integer>>();
-                IntStream.range(0, 3).forEach(k -> IntStream.range(0, 3).forEach(l -> scope.add(variables.get(i + k).get(j + l))));
+                for (int x = 0; x < 3; x++) {
+                    for (int y = 0; y < 3; y++) {
+                        scope.add(variables.get(i + x).get(j + y));
+                    }
+                }
                 constraints.add(new AllDiffConstraint<>("box_alldiff", scope));
             }
         }
@@ -166,22 +170,22 @@ public class Sudoku {
         };
     }
 
-    private static boolean checkConflict(int row, int column, int value, Integer[][] board) {
+    private static boolean checkConflict(int row, int column, int value, int[][] board) {
         return (checkConflictRow(row, value, board) &&
             checkConflictColumn(column, value, board) &&
             checkConflictBox(row, column, value, board));
     }
 
-    private static boolean checkConflictColumn(int column, int value, Integer[][] board) {
+    private static boolean checkConflictColumn(int column, int value, int[][] board) {
         Stream<Integer> boardColumn = Arrays.stream(board).map(boardRow -> boardRow[column]);
         return boardColumn.noneMatch(num -> num == value);
     }
 
-    private static boolean checkConflictRow(int row, int value, Integer[][] board) {
+    private static boolean checkConflictRow(int row, int value, int[][] board) {
         return Arrays.stream(board[row]).noneMatch(num -> num == value);
     }
 
-    private static boolean checkConflictBox(int row, int column, int num, Integer[][] board) {
+    private static boolean checkConflictBox(int row, int column, int num, int[][] board) {
         int boxRow = row - row % BOX_DIM;
         int boxCol = column - column % BOX_DIM;
         for (int i = 0; i < BOX_DIM; i++) {
@@ -194,7 +198,7 @@ public class Sudoku {
         return true;
     }
 
-    private static void fillDiagonal(Integer[][] board) {
+    private static void fillDiagonal(int[][] board) {
         for (int i = 0; i < DIM; i += BOX_DIM) {
             int num;
             for (int row = 0; row < BOX_DIM; row++) {
@@ -211,7 +215,7 @@ public class Sudoku {
         }
     }
 
-    private static boolean fillRemaining(int row, int col, Integer[][] board) {
+    private static boolean fillRemaining(int row, int col, int[][] board) {
         // Start on new row if col index goes over limit
         if (row < DIM - 1 && col >= DIM) {
             row += 1;
@@ -240,7 +244,7 @@ public class Sudoku {
         return false;
     }
 
-    private static void removeDigits(Difficulty difficulty, Integer[][] board) {
+    private static void removeDigits(Difficulty difficulty, int[][] board) {
         int count = getNumToRemove(difficulty);
         while (count != 0) {
             int cellId = randomGenerator(DIM * DIM) - 1;

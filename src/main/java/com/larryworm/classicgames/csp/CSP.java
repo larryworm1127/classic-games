@@ -108,7 +108,8 @@ public class CSP<E> {
         return errors.isEmpty();
     }
 
-    public static <E> CSP<E> create(String name, List<? extends Variable<E>> variables, List<Constraint<E>> constraints) {
+    public static <E> CSP<E> create(String name, List<? extends Variable<E>> variables,
+                                    List<Constraint<E>> constraints) {
         return new CSP<>(name, variables, constraints);
     }
 }

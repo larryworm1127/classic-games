@@ -1,0 +1,51 @@
+<div class="minesweeper-board" [ngClass]="'minesweeper-' + difficulty">
+  <div class="board">
+    <header class="board-header">
+      <form>
+        <select class="board-difficulty-control" name="gameLevel" [ngModel]="difficulty"
+                (ngModelChange)="onDifficultyChange($event)">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </form>
+
+      <button class="board-face" (click)="createNewEmptyBoard()">
+        <img class="board-face-img" src="/assets/minesweeper/{{ emojiFace }}.png" alt="Face">
+      </button>
+
+      <div class="board-infos">
+        <div class="board-info">
+          <img class="board-info-img board-flag-img"
+               src="/assets/minesweeper/triangular-flag-on-post.png" alt="Amount of flags left">
+          <span class="board-info-text">{{ flagsAvailable | stopWatch:'00' }}</span>
+        </div>
+
+        <div class="board-info">
+          <img class="board-info-img board-stopwatch-img"
+               src="/assets/minesweeper/stopwatch.png"
+               alt="Timer">
+          <span class="board-info-text">{{ timer | stopWatch:'000'}}</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="board-main" [ngClass]="[gameState ? gameState : '']">
+      <div class="board-inner" (contextmenu)="onContextMenu($event)">
+        <section *ngFor="let row of boardParsed; trackBy: trackByRow" class="minesweeper-row">
+          <app-minesweeper-cell *ngFor="let cell of row; trackBy: trackByCell"
+                                [cell]="cell"
+                                (open)="onOpenCell($event)">
+          </app-minesweeper-cell>
+        </section>
+      </div>
+    </main>
+
+    <footer class="board-footer">
+      <button type="button" class="cell board-new-game-button" (click)="createNewEmptyBoard()">
+        New game
+      </button>
+    </footer>
+  </div>
+</div>
+
