@@ -12,11 +12,22 @@ import { Difficulty } from "@modules/minesweeper/enums/difficulty";
 })
 export class MinesweeperService {
 
-  constructor() {
-    this.width = 9;
-    this.height = 9;
-    this.numMines = 10;
-  }
+  height: number = 9;
+  width: number = 9;
+  numMines: number = 10;
+  difficulty: Difficulty = Difficulty.Easy;
+  flagsAvailable: number = this.numMines;
+  emojiFace: Resources = Resources.GrinningFace;
+  isFirstCellClick: boolean = true;
+  firstCellIsReadyToOpen = new Subject<boolean>();
+
+  private board: number[][] | any[][] = [];
+  private boardData$ = new Subject<BoardData>();
+  private minesPositions: number[][] = [];
+  private remainingEmptyCells: BehaviorSubject<number> = new BehaviorSubject(this.height * this.width - this.numMines);
+  private gameStatus = new BehaviorSubject(GameState.NotStarted);
+
+  constructor() { }
 
   get boardHasChanded$(): Observable<BoardData> {
     return this.boardData$.asObservable();
@@ -35,28 +46,8 @@ export class MinesweeperService {
   }
 
   get firstCellIsReadyToOpen$(): Observable<boolean> {
-    return this._firstCellIsReadyToOpen.asObservable();
+    return this.firstCellIsReadyToOpen.asObservable();
   }
-
-  set firstCellIsReadyToOpen(state: boolean) {
-    this._firstCellIsReadyToOpen.next(true);
-  }
-
-  height: number = 9;
-  width: number = 9;
-  numMines: number = 10;
-  difficulty: Difficulty = Difficulty.Easy;
-
-  private board: number[][] | any[][] = [];
-  private boardData$ = new Subject<BoardData>();
-  private minesPositions: number[][] = [];
-  private isFirstBoard = true;
-  private remainingEmptyCells: BehaviorSubject<number> = new BehaviorSubject(this.height * this.width - this.numMines);
-  flagsAvailable: number = this.numMines;
-  private gameStatus = new BehaviorSubject(GameState.NotStarted);
-  emojiFace: Resources = Resources.GrinningFace;
-  isFirstCellClick: boolean = true;
-  private _firstCellIsReadyToOpen = new Subject<boolean>();
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
   private static getRandomInt(min: number, max: number): number {
@@ -69,20 +60,11 @@ export class MinesweeperService {
 
   newEmptyBoard(): void {
     this.board = [];
-    // this.height = vertical;
-    // this.width = horizontal;
-    // this.numMines = minesLength;
     this.flagsAvailable = this.numMines;
     this.emojiFace = Resources.GrinningFace;
     this.isFirstCellClick = true;
-
-    if (this.isFirstBoard) {
-      this.remainingEmptyCells = new BehaviorSubject(this.height * this.width - this.numMines);
-      this.isFirstBoard = false;
-    } else {
-      this.remainingEmptyCells.next(this.height * this.width - this.numMines);
-      this.gameStatus.next(GameState.NotStarted);
-    }
+    this.remainingEmptyCells.next(this.height * this.width - this.numMines);
+    this.gameStatus.next(GameState.NotStarted);
 
     this.generateEmptyBoard();
     this.boardData$.next({ board: [...this.board], isBoardReset: true });

@@ -56,7 +56,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
       this.parseBoard(boardData.board);
 
       if (!boardData.isBoardReset) {
-        this.gameService.firstCellIsReadyToOpen = true;
+        this.gameService.firstCellIsReadyToOpen.next(true);
       }
     });
 
@@ -198,7 +198,6 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     if (cellData.type === CellContent.Mine) {
       cellData.isMineExploded = true;
       this.gameService.setGameStatus(GameState.Lost);
-
       return;
     }
 
