@@ -15,13 +15,13 @@ import { Resources } from "@modules/minesweeper/enums/resources";
 })
 export class MinesweeperCellComponent implements OnChanges {
 
-  constructor(private gameService: MinesweeperService) {
-  }
-
   @Input() cell: CellModel | any;
   @Output() open = new EventEmitter<number[]>();
 
   private gameStatusSub: Subscription | undefined;
+
+  constructor(private gameService: MinesweeperService) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gameStatusSub) {
@@ -32,10 +32,8 @@ export class MinesweeperCellComponent implements OnChanges {
     }
   }
 
-  onClick() {
-    if (this.isUnavailableToOpen()) {
-      return;
-    } else {
+  onClick(): void {
+    if (this.isAllowedToOpen()) {
       this.open.emit([this.cell.y, this.cell.x]);
     }
   }
@@ -46,32 +44,22 @@ export class MinesweeperCellComponent implements OnChanges {
   }
 
   private insertFlag(): void {
-    if (this.isUnavailableToFlag()) {
-      return;
-    }
-
-    if (this.cell.label === CellContent.Flag) {
-      this.cell.label = '';
-      this.gameService.flagsAvailable += 1;
-      if (this.cell.type !== CellContent.Mine && this.gameStatusSub) {
-        this.gameStatusSub.unsubscribe();
+    if (this.isAllowedToFlag()) {
+      if (this.cell.label === CellContent.Flag) {
+        this.cell.label = '';
+        this.gameService.flagsAvailable += 1;
+        if (this.cell.type !== CellContent.Mine && this.gameStatusSub) {
+          this.gameStatusSub.unsubscribe();
+        }
+      } else if (this.gameService.flagsAvailable > 0) {
+        this.cell.label = CellContent.Flag;
+        this.gameService.flagsAvailable -= 1;
+        if (this.cell.type !== CellContent.Mine) {
+          this.subscribeGameState();
+        }
       }
-    } else if (this.gameService.flagsAvailable > 0) {
-      this.cell.label = CellContent.Flag;
-      this.gameService.flagsAvailable -= 1;
-      if (this.cell.type !== CellContent.Mine) {
-        this.subscribeGameState();
-      }
+      this.gameService.emojiFace = Resources.GrinningFace;
     }
-
-    this.gameService.emojiFace = Resources.GrinningFace;
-  }
-
-  private isUnavailableToFlag(): boolean {
-    return this.gameService.gameStateValue === GameState.Won
-        || this.gameService.gameStateValue === GameState.Lost
-        || this.gameService.isFirstCellClick
-        || this.cell.isOpened;
   }
 
   private subscribeGameState(): void {
@@ -98,9 +86,20 @@ export class MinesweeperCellComponent implements OnChanges {
         });
   }
 
-  private isUnavailableToOpen(): boolean {
-    return this.cell.label === CellContent.Flag ||
+  private isAllowedToFlag(): boolean {
+    return !(
+        this.gameService.gameStateValue === GameState.Won ||
         this.gameService.gameStateValue === GameState.Lost ||
-        this.gameService.gameStateValue === GameState.Won;
+        this.gameService.isFirstCellClick ||
+        this.cell.isOpened
+    );
+  }
+
+  private isAllowedToOpen(): boolean {
+    return !(
+        this.cell.label === CellContent.Flag ||
+        this.gameService.gameStateValue === GameState.Lost ||
+        this.gameService.gameStateValue === GameState.Won
+    );
   }
 }

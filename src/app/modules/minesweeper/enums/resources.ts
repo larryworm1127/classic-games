@@ -1,6 +1,5 @@
 export enum Resources {
   GrinningFace = 'grinning-face',
-  FearfulFace = 'fearful-face',
   NauseatedFace = 'nauseated-face',
   SmilingFaceWithSunglasses = 'smiling-face-with-sunglasses',
   PileOfPoop = 'pile-of-poop',
