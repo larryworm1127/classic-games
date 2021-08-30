@@ -40,17 +40,12 @@ export class MinesweeperCellComponent implements OnChanges {
     }
   }
 
-  onContextMenu(event: Event | any) {
+  onContextMenu(event: Event | any): void {
     event.preventDefault();
-    this.insertFlag(event);
-    return true;
+    this.insertFlag();
   }
 
-  private insertFlag(event?: Event): void {
-    if (event) {
-      event.preventDefault();
-    }
-
+  private insertFlag(): void {
     if (this.isUnavailableToFlag()) {
       return;
     }

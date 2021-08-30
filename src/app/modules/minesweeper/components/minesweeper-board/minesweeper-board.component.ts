@@ -128,10 +128,6 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     this.createNewEmptyBoard();
   }
 
-  onContextMenu(event: Event): void {
-    event.preventDefault();
-  }
-
   trackByRow(index: number): number {
     return index;
   }
@@ -175,8 +171,8 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private openCell(coordinate: number[]): void {
-    const cellData = this.boardParsed[coordinate[0]][coordinate[1]];
+  private openCell(cellCoord: number[]): void {
+    const cellData = this.boardParsed[cellCoord[0]][cellCoord[1]];
 
     if (cellData.type === CellContent.Mine) {
       cellData.isMineExploded = true;
@@ -258,7 +254,7 @@ export class MinesweeperBoardComponent implements OnInit, OnDestroy {
     return flagsAroundLength;
   }
 
-  private openCellsAround(clickedCellCoord: number[]) {
+  private openCellsAround(clickedCellCoord: number[]): void {
     let willLost = false;
 
     for (let neighborCell of MinesweeperBoardComponent.getNeighborCells(clickedCellCoord)) {
