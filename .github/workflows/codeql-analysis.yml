@@ -40,8 +40,6 @@ jobs:
     steps:
     - name: Setup Java JDK
       uses: actions/setup-java@v2.3.1
-      with:
-        java-version: 16
     
     - name: Checkout repository
       uses: actions/checkout@v2
