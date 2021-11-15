@@ -1,7 +1,7 @@
 package com.larryworm.classicgames.controller;
 
 import com.larryworm.classicgames.gamelogic.TicTacToe;
-import com.larryworm.classicgames.gamelogic.TicTacToeState;
+import com.larryworm.classicgames.gamelogic.TTTState;
 import org.javatuples.Pair;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import java.util.List;
 public class TicTacToeController {
 
     @GetMapping("/ttt/move")
-    Pair<Integer, Integer> getMove(@RequestParam List<TicTacToeState> board, @RequestParam TicTacToeState computer) {
+    Pair<Integer, Integer> getMove(@RequestParam List<TTTState> board, @RequestParam TTTState computer) {
         return TicTacToe.getMove(board, computer);
     }
 }

@@ -1,6 +1,6 @@
 package com.larryworm.classicgames.gamelogic;
 
-public enum TicTacToeState {
+public enum TTTState {
     EMPTY,
     PLAYERO,
     PLAYERX

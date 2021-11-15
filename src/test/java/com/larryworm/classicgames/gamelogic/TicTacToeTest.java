@@ -2,7 +2,7 @@ package com.larryworm.classicgames.gamelogic;
 
 import org.junit.jupiter.api.Test;
 
-import static com.larryworm.classicgames.gamelogic.TicTacToeState.*;
+import static com.larryworm.classicgames.gamelogic.TTTState.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TicTacToeTest {
@@ -12,12 +12,12 @@ class TicTacToeTest {
         // x x o
         //   x x
         // o   o
-        TicTacToeState[][] board = {
+        TTTState[][] board = {
             {PLAYERX, PLAYERX, PLAYERO},
             {EMPTY, PLAYERX, PLAYERX},
             {PLAYERO, EMPTY, PLAYERO}
         };
-        var result = TicTacToe.getMove(GameBoard.create(3, board), PLAYERO);
+        var result = TicTacToe.getMove(TTTGameBoard.create(3, board), PLAYERO);
         int row = result.getValue0();
         int col = result.getValue1();
         assertEquals(2, row, "Bad Move X: " + row);
@@ -29,12 +29,12 @@ class TicTacToeTest {
         // x
         // o o x
         // x o x
-        TicTacToeState[][] board = {
+        TTTState[][] board = {
             {PLAYERX, EMPTY, EMPTY},
             {PLAYERO, PLAYERO, PLAYERX},
             {PLAYERX, PLAYERO, PLAYERX}
         };
-        var result = TicTacToe.getMove(GameBoard.create(3, board), PLAYERO);
+        var result = TicTacToe.getMove(TTTGameBoard.create(3, board), PLAYERO);
         int row = result.getValue0();
         int col = result.getValue1();
         assertEquals(0, row, "Bad Move X: " + row);
@@ -46,12 +46,12 @@ class TicTacToeTest {
         // x x
         // o o x
         // o
-        TicTacToeState[][] board = {
+        TTTState[][] board = {
             {PLAYERX, PLAYERX, EMPTY},
             {PLAYERO, PLAYERO, PLAYERX},
             {PLAYERO, EMPTY, EMPTY}
         };
-        var result = TicTacToe.getMove(GameBoard.create(3, board), PLAYERO);
+        var result = TicTacToe.getMove(TTTGameBoard.create(3, board), PLAYERO);
         int row = result.getValue0();
         int col = result.getValue1();
         assertEquals(0, row, "Bad Move X: " + row);
@@ -63,12 +63,12 @@ class TicTacToeTest {
         // x x
         // x o
         // o o x
-        TicTacToeState[][] board = {
+        TTTState[][] board = {
             {PLAYERX, PLAYERX, EMPTY},
             {PLAYERX, PLAYERO, EMPTY},
             {PLAYERO, PLAYERO, PLAYERX}
         };
-        var result = TicTacToe.getMove(GameBoard.create(3, board), PLAYERO);
+        var result = TicTacToe.getMove(TTTGameBoard.create(3, board), PLAYERO);
         int row = result.getValue0();
         int col = result.getValue1();
         assertEquals(0, row, "Bad Move X: " + row);
@@ -80,12 +80,12 @@ class TicTacToeTest {
         // x o x
         // x x o
         //     o
-        TicTacToeState[][] board = {
+        TTTState[][] board = {
             {PLAYERX, PLAYERO, PLAYERX},
             {PLAYERX, PLAYERX, PLAYERO},
             {EMPTY, EMPTY, PLAYERO}
         };
-        var result = TicTacToe.getMove(GameBoard.create(3, board), PLAYERO);
+        var result = TicTacToe.getMove(TTTGameBoard.create(3, board), PLAYERO);
         int row = result.getValue0();
         int col = result.getValue1();
         assertEquals(2, row, "Bad Move X: " + row);
@@ -97,12 +97,12 @@ class TicTacToeTest {
         // x o x
         // x x o
         // o
-        TicTacToeState[][] board = {
+        TTTState[][] board = {
             {PLAYERX, PLAYERO, PLAYERX},
             {PLAYERX, PLAYERX, PLAYERO},
             {PLAYERO, EMPTY, EMPTY}
         };
-        var result = TicTacToe.getMove(GameBoard.create(3, board), PLAYERO);
+        var result = TicTacToe.getMove(TTTGameBoard.create(3, board), PLAYERO);
         int row = result.getValue0();
         int col = result.getValue1();
         assertEquals(2, row, "Bad Move X: " + row);

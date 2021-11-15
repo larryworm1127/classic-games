@@ -1,117 +1,80 @@
 package com.larryworm.classicgames.gamelogic;
 
-import com.larryworm.classicgames.Util;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
-public class GameBoard {
+public abstract class GameBoard<T> {
 
-    private final TicTacToeState[][] board;
-    private final int dim;
+    private final List<List<T>> board;
+    private final IGameBoardInfo<T> boardInfo;
+    private final int width;
+    private final int height;
 
-    private GameBoard(int dim) {
-        this.dim = dim;
+    public GameBoard(int width, int height, IGameBoardInfo<T> boardInfo) {
+        this.width = width;
+        this.height = height;
+        this.boardInfo = boardInfo;
 
-        this.board = new TicTacToeState[dim][dim];
-        for (int i = 0; i < dim; i++) {
-            Arrays.fill(board[i], TicTacToeState.EMPTY);
+        this.board = new ArrayList<>(height);
+        for (int i = 0; i < height; i++) {
+            List<T> row = new ArrayList<>(width);
+            for (int j = 0; j < width; j++) {
+                row.set(j, boardInfo.getEmpty());
+            }
+            this.board.set(i, row);
         }
     }
 
-    private GameBoard(int dim, TicTacToeState[][] board) {
-        this.dim = dim;
+    public GameBoard(int width, int height, IGameBoardInfo<T> boardInfo, List<List<T>> board) {
+        this.width = width;
+        this.height = height;
+        this.boardInfo = boardInfo;
 
-        this.board = new TicTacToeState[dim][dim];
-        for (int i = 0; i < dim; i++) {
-            System.arraycopy(board[i], 0, this.board[i], 0, dim);
+        this.board = new ArrayList<>(height);
+        for (int i = 0; i < height; i++) {
+            this.board.add(new ArrayList<>(board.get(i)));
         }
     }
 
-    public TicTacToeState[][] getBoard() {
+    public List<List<T>> getBoard() {
         return board;
     }
 
-    public int getDim() {
-        return dim;
+    public int getWidth() {
+        return width;
     }
 
-    public TicTacToeState getCell(int row, int column) {
-        return board[row][column];
+    public int getHeight() {
+        return height;
     }
 
-    public void setState(int row, int col, TicTacToeState player) {
-        if (board[row][col] == TicTacToeState.EMPTY) {
-            board[row][col] = player;
-        }
+    public IGameBoardInfo<T> getBoardInfo() {
+        return boardInfo;
+    }
+
+    public T getCell(int row, int column) {
+        return board.get(row).get(column);
+    }
+
+    public void setState(int row, int col, T content) {
+        board.get(row).set(col, content);
     }
 
     public List<Pair<Integer, Integer>> getEmptyCells() {
-        List<Pair<Integer, Integer>> empty = new ArrayList<>();
+        List<Pair<Integer, Integer>> emptyCells = new ArrayList<>();
 
-        for (int row = 0; row < board.length; row++) {
-            for (int column = 0; column < board.length; column++) {
-                if (board[row][column] == TicTacToeState.EMPTY) {
-                    empty.add(Pair.with(row, column));
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                if (getCell(row, col) == boardInfo.getEmpty()) {
+                    emptyCells.add(Pair.with(row, col));
                 }
             }
         }
 
-        return empty;
+        return emptyCells;
     }
 
-    public GameState checkWin() {
-        // Rows
-        var lines = new ArrayList<>(Util.twoDArrayTo2dList(board));
-
-        // Columns
-        for (int i = 0; i < dim; i++) {
-            var column = new ArrayList<TicTacToeState>();
-            for (int j = 0; j < dim; j++) {
-                column.add(board[j][i]);
-            }
-            lines.add(column);
-        }
-
-        // Diagonal
-        var diagOne = new ArrayList<TicTacToeState>();
-        var diagTwo = new ArrayList<TicTacToeState>();
-
-        for (int i = 0; i < dim; i++) {
-            diagOne.add(board[i][i]);
-            diagTwo.add(board[i][dim - i - 1]);
-        }
-
-        lines.add(diagOne);
-        lines.add(diagTwo);
-
-        // check every line for win situation
-        for (var line : lines) {
-            var setLine = Set.copyOf(line);
-
-            if (setLine.size() == 1 && !setLine.contains(TicTacToeState.EMPTY)) {
-                return (line.get(0) == TicTacToeState.PLAYERO) ? GameState.PLAYERO_WIN : GameState.PLAYERX_WIN;
-            }
-        }
-
-        // No winner, check for draw
-        var empty = getEmptyCells();
-        if (empty.isEmpty()) {
-            return GameState.DRAW;
-        }
-
-        // Game is still in progress
-        return GameState.PLAYING;
-    }
-
-    public static GameBoard ofSize(int dim) {
-        return new GameBoard(dim);
-    }
-
-    public static GameBoard create(int dim, TicTacToeState[][] board) {
-        return new GameBoard(dim, board);
-    }
+    public abstract GameState checkWin();
 }

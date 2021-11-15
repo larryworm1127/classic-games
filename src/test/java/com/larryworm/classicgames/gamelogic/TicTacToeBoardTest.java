@@ -2,22 +2,22 @@ package com.larryworm.classicgames.gamelogic;
 
 import org.junit.jupiter.api.Test;
 
-import static com.larryworm.classicgames.gamelogic.TicTacToeState.*;
+import static com.larryworm.classicgames.gamelogic.TTTState.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class GameBoardTest {
+class TicTacToeBoardTest {
 
     @Test
     public void testCheckWinHuman() {
         // x x x
         //   o
         // o
-        TicTacToeState[][] boardContent = {
+        TTTState[][] boardContent = {
             {PLAYERX, PLAYERX, PLAYERX},
             {EMPTY, PLAYERO, EMPTY},
             {PLAYERO, EMPTY, EMPTY}
         };
-        GameBoard board = GameBoard.create(3, boardContent);
+        TTTGameBoard board = TTTGameBoard.create(3, boardContent);
         GameState state = board.checkWin();
         assertEquals(GameState.PLAYERX_WIN, state);
     }
@@ -27,12 +27,12 @@ class GameBoardTest {
         // o o o
         //   x
         // x
-        TicTacToeState[][] boardContent = {
+        TTTState[][] boardContent = {
             {PLAYERO, PLAYERO, PLAYERO},
             {EMPTY, PLAYERX, EMPTY},
             {PLAYERX, EMPTY, EMPTY}
         };
-        GameBoard board = GameBoard.create(3, boardContent);
+        TTTGameBoard board = TTTGameBoard.create(3, boardContent);
         GameState state = board.checkWin();
         assertEquals(GameState.PLAYERO_WIN, state);
     }
@@ -42,12 +42,12 @@ class GameBoardTest {
         // x o x
         // o o x
         // x x o
-        TicTacToeState[][] boardContent = {
+        TTTState[][] boardContent = {
             {PLAYERX, PLAYERO, PLAYERX},
             {PLAYERO, PLAYERO, PLAYERX},
             {PLAYERX, PLAYERX, PLAYERO}
         };
-        GameBoard board = GameBoard.create(3, boardContent);
+        TTTGameBoard board = TTTGameBoard.create(3, boardContent);
         GameState state = board.checkWin();
         assertEquals(GameState.DRAW, state);
     }
@@ -57,12 +57,12 @@ class GameBoardTest {
         // x   x
         //   o
         // o
-        TicTacToeState[][] boardContent = {
+        TTTState[][] boardContent = {
             {PLAYERX, EMPTY, PLAYERX},
             {EMPTY, PLAYERO, EMPTY},
             {PLAYERO, EMPTY, EMPTY}
         };
-        GameBoard board = GameBoard.create(3, boardContent);
+        TTTGameBoard board = TTTGameBoard.create(3, boardContent);
         GameState state = board.checkWin();
         assertEquals(GameState.PLAYING, state);
     }
